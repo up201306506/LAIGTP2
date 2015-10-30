@@ -67,10 +67,22 @@
             0,1,2
         ];
 
+    this.Ux = this.p2x - this.p1x;
+    this.Uy = this.p2y - this.p1y;
+    this.Uz = this.p2z - this.p1z;
+
+    this.Vx = this.p3x - this.p1x;
+    this.Vy = this.p3y - this.p1y;
+    this.Vz = this.p3z - this.p1z;
+
+    this.Nx = ( this.Uy * this.Vz ) - ( this.Uz * this.Vy );
+    this.Ny = ( this.Uz * this.Vx ) - ( this.Ux * this.Vz );
+    this.Nz = ( this.Ux * this.Vy ) - ( this.Uy * this.Vx );
+    
    this.normals = [
-			0, 0, 1,
-			0, 0, 1,
-			0, 0, 1
+			this.Nx,  this.Ny, this.Nz,
+			this.Nx,  this.Ny, this.Nz,
+			this.Nx,  this.Ny, this.Nz
 		];
 		// E se o triangulo for inclinado? 
 

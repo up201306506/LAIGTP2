@@ -44,12 +44,12 @@ LSXscene.prototype.initLights = function () {
 	
 	for (var i = 0; i < 8; i++)
 	{
-	this.shader.bind();
+	
 		this.lights[i].setSpecular(0,0,0,0);
 		this.lights[i].setAmbient(0,0,0,0);
 		this.lights[i].setDiffuse(0,0,0,0);
 		this.lights[i].update();
-    this.shader.unbind();
+    
     	
 		this.lights[i].setVisible(false);
 		this.lights[i].disable();
@@ -106,7 +106,7 @@ LSXscene.prototype.display = function () {
 		
 	*/
 
-    this.shader.bind();
+  
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 	this.updateProjectionMatrix();
@@ -143,7 +143,7 @@ LSXscene.prototype.display = function () {
 
 	
 	
-    this.shader.unbind();
+    
 };
 
 
@@ -225,7 +225,7 @@ LSXscene.prototype.Read_Graph_Lights = function () {
 		
 	*/
 	
-	this.shader.bind();
+	
 	console.log("Setting up lights...");
 	for (var i = 0; i < this.graph.Parser.Lights.length; i++)
 	{
@@ -263,7 +263,7 @@ LSXscene.prototype.Read_Graph_Lights = function () {
 		
 	}
 	
-	this.shader.unbind();
+	
 }
 
 

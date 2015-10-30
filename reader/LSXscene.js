@@ -1,0 +1,765 @@
+
+
+
+function LSXscene() {
+    CGFscene.call(this);
+    this.texture = null;
+}
+
+LSXscene.prototype = Object.create(CGFscene.prototype);
+LSXscene.prototype.constructor = LSXscene;
+
+LSXscene.prototype.init = function (application) {
+    CGFscene.prototype.init.call(this, application);
+
+	this.initCameras();
+    this.initLights();
+    this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    this.gl.clearDepth(100.0);
+    this.gl.enable(this.gl.DEPTH_TEST);
+	this.gl.enable(this.gl.CULL_FACE);
+    this.gl.depthFunc(this.gl.LEQUAL);
+
+	this.axis = new CGFaxis(this);
+	this.enableTextures(true);
+
+	
+	
+	this.SceneNode_id;	// (String) id do Node coorrespondente à cena, ou seja, a raiz go grafo a partir do qual se encontram os restantes nós.
+	
+	this.LeafArray = []; 
+	this.NodeArray = [];	
+	this.TextureArray = [];
+	this.MaterialArray = [];	//A maioria dos dados encontrados no Parser são guardados nestes arrays.
+	
+	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
+		
+		
+		
+};
+
+LSXscene.prototype.initLights = function () {
+    
+	//Luzes não declaradas no grafo começam inactivas, invisiveis e com emissão nula.
+	
+	for (var i = 0; i < 8; i++)
+	{
+	this.shader.bind();
+		this.lights[i].setSpecular(0,0,0,0);
+		this.lights[i].setAmbient(0,0,0,0);
+		this.lights[i].setDiffuse(0,0,0,0);
+		this.lights[i].update();
+    this.shader.unbind();
+    	
+		this.lights[i].setVisible(false);
+		this.lights[i].disable();
+	}
+};
+
+LSXscene.prototype.initCameras = function () {
+	this.camera = new CGFcamera(.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+	};
+
+LSXscene.prototype.setDefaultAppearance = function () {
+	
+	this.setAmbient(0.7, 0.7, 0.7, 1.0);
+	this.setDiffuse(0.4, 0.4, 0.4, 1.0);
+    this.setSpecular(0.4, 0.4, 0.4, 1.0);
+    this.setShininess(10.0);	
+};
+
+
+	//-----------------------------------------------------//
+	//-----					onGraphLoaded			-------//
+	//-----------------------------------------------------//
+
+
+
+LSXscene.prototype.onGraphLoaded = function () 
+{
+	/*
+		Handler called when the graph is finally loaded. 
+		As loading is asynchronous, this may be called already after the application has started the run loop
+	*/
+	
+	this.Read_Graph_Initials();
+	this.Read_Graph_Illumination();
+	this.Read_Graph_Lights();
+	this.Read_Graph_Materials();
+	this.Read_Graph_Textures();
+	
+	this.Generate_Graph_Leafs();
+	this.Generate_Graph_Nodes();
+	
+};
+
+
+	//-----------------------------------------------------//
+	//-----					DISPLAY					-------//
+	//-----------------------------------------------------//
+
+LSXscene.prototype.display = function () {
+	
+	/*
+		A função display da cena é a que percorre todos o grafo quando este já tiver ser lido.
+		No entanto, enquanto loadedOk for falso, todos esses passos são ignorados pois não há valores com que trabalhar.
+		
+	*/
+
+    this.shader.bind();
+    this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
+    this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+	this.updateProjectionMatrix();
+    this.loadIdentity();
+	this.applyViewMatrix();
+	this.setDefaultAppearance();
+
+	
+	//Light Update
+		for(var i = 0; i <= 7; i++){
+			this.lights[i].update();
+		}			
+	
+	if (this.graph.loadedOk && true)
+	{	
+
+		//O aspecto original da cena e as suas transformações são guardadas em stacks pois os seus valores são necessários no multiplos passos do Display_Graph()
+		this.pushMatrix();
+		this.pushMatrix_m4(this.Initial_Transform);
+		
+		//Display do Grafo
+		this.Display_Graph();
+				
+				
+				
+		//Eixos devem ser gerados após a matriz de transformações iniciais serem aplicadas.
+		this.popMatrix();  //-perspectiva original
+		this.multMatrix(this.popMatrix_m4()); 
+		if (this.graph.loadedOk && this.graph.Parser.Initials.axis_length > 0)
+			this.axis.display();
+		
+		
+	}
+
+	
+	
+    this.shader.unbind();
+};
+
+
+	//-----------------------------------------------------//
+	//-----					INITIALS				-------//
+	//-----------------------------------------------------//
+
+LSXscene.prototype.Read_Graph_Initials = function (){
+	/*
+		Usa os valors da tag <INITIALS> do LSX nos seus locais apropriados.
+		
+		É notável o cálculo da this.Initial_Transform, a matriz de transformações iniciais da cena. Este cálculo
+		apenas ocorre uma vez, aqui.
+	*/
+	
+	//camera
+	this.camera.near = this.graph.Parser.Initials.view_near;
+	this.camera.far = this.graph.Parser.Initials.view_far;
+	
+
+	//Transformações Iniciais
+	var Transformation_Matrix = mat4.create();
+	mat4.identity(Transformation_Matrix);
+
+	this.transformMatrix_m4(Transformation_Matrix, 'translation', 
+					this.graph.Parser.Initials.view_translation_xx,
+					this.graph.Parser.Initials.view_translation_yy,
+					this.graph.Parser.Initials.view_translation_zz);
+					
+	this.transformMatrix_m4(Transformation_Matrix, 'rotation', 1,0,0, this.graph.Parser.Initials.view_rotation_xx);
+	this.transformMatrix_m4(Transformation_Matrix, 'rotation', 0,1,0, this.graph.Parser.Initials.view_rotation_yy);
+	this.transformMatrix_m4(Transformation_Matrix, 'rotation', 0,0,1, this.graph.Parser.Initials.view_rotation_zz);
+	
+	this.transformMatrix_m4(Transformation_Matrix, 'scale', 
+					this.graph.Parser.Initials.view_scale_xx,
+					this.graph.Parser.Initials.view_scale_yy,
+					this.graph.Parser.Initials.view_scale_zz);
+
+	this.Initial_Transform = Transformation_Matrix;
+	
+
+	//Axis Length
+	this.axis = new CGFaxis(this, this.graph.Parser.Initials.axis_length, 0.1);
+	
+}
+
+	//-----------------------------------------------------//
+	//-----					ILLUMINATION			-------//
+	//-----------------------------------------------------//
+
+LSXscene.prototype.Read_Graph_Illumination = function (){
+	/*
+		Usa os valores da tag <ILLUMINATION> do LSX nos seus locais apropriados.		
+	*/
+	   
+		//Ambient Light 
+	this.setGlobalAmbientLight(this.graph.Parser.Illumination.ambient[0],
+								this.graph.Parser.Illumination.ambient[1],
+								this.graph.Parser.Illumination.ambient[2],
+								this.graph.Parser.Illumination.ambient[3]);
+		
+		//Background
+	this.gl.clearColor(	this.graph.Parser.Illumination.background[0],
+						this.graph.Parser.Illumination.background[1],
+						this.graph.Parser.Illumination.background[2],
+						this.graph.Parser.Illumination.background[3]);
+}
+
+
+	//-----------------------------------------------------//
+	//-----					LIGHTS					-------//
+	//-----------------------------------------------------//
+LSXscene.prototype.Read_Graph_Lights = function () {
+	
+	/*
+		Usa os valores da tag <LIGHTS> do LSX nos seus locais apropriados.
+		
+		Estas declarações apenas ocorrem uma vez. No display, apenas o update() é necessário para utilizar as luzes.
+		
+	*/
+	
+	this.shader.bind();
+	console.log("Setting up lights...");
+	for (var i = 0; i < this.graph.Parser.Lights.length; i++)
+	{
+		
+
+		
+		this.lights[i].setPosition(this.graph.Parser.Lights[i].position[0],
+									this.graph.Parser.Lights[i].position[1],
+									this.graph.Parser.Lights[i].position[2],
+									this.graph.Parser.Lights[i].position[3]);
+									
+		this.lights[i].setAmbient(this.graph.Parser.Lights[i].ambient[0],
+									this.graph.Parser.Lights[i].ambient[1],
+									this.graph.Parser.Lights[i].ambient[2],
+									this.graph.Parser.Lights[i].ambient[3]);
+		this.lights[i].setDiffuse(this.graph.Parser.Lights[i].diffuse[0],
+									this.graph.Parser.Lights[i].diffuse[1],
+									this.graph.Parser.Lights[i].diffuse[2],
+									this.graph.Parser.Lights[i].diffuse[3]);
+		this.lights[i].setSpecular(this.graph.Parser.Lights[i].specular[0],
+									this.graph.Parser.Lights[i].specular[1],
+									this.graph.Parser.Lights[i].specular[2],
+									this.graph.Parser.Lights[i].specular[3]);
+																
+		if (this.graph.Parser.Lights[i].enabled){
+			this.lights[i].enable();
+			this.lights[i].setVisible(true);
+			
+		}
+			else
+		this.lights[i].disable();
+
+		this.lights[i].update();
+
+		
+	}
+	
+	this.shader.unbind();
+}
+
+
+
+	//-----------------------------------------------------//
+	//-----					TEXTURES				-------//
+	//-----------------------------------------------------//
+
+LSXscene.prototype.Read_Graph_Textures = function (){
+	/*
+		Usa os valores da tag <TEXTURES> do LSX para criar objectos CGFtexture qe ficam guardado na TextureArray.
+		
+	*/
+	
+	for (var i = 0; i < this.graph.Parser.Textures.length; i++)
+	{
+		this.TextureArray[i] = new CGFtexture(this, this.graph.Parser.Textures[i].path);
+		
+		
+		this.TextureArray[i].id = this.graph.Parser.Textures[i].id;
+		this.TextureArray[i].factor_s = this.graph.Parser.Textures[i].factor_s;
+		this.TextureArray[i].factor_t = this.graph.Parser.Textures[i].factor_t;
+	
+	}
+}
+
+	//-----------------------------------------------------//
+	//-----					MATERIALS				-------//
+	//-----------------------------------------------------//
+
+LSXscene.prototype.Read_Graph_Materials = function (){
+	/*
+		Usa os valores da tag <MATERIALS> do LSX para criar objectos CGFappearance que ficam guardado na MaterialArray.
+		
+		Adicionalmente, é criado um material com as mesmas propriedades que a aparecia default da cena. 
+		A existencia deste material deve-se à implementação de Display_Leaf()
+	*/
+	
+	//Material Default
+	var defMat = new CGFappearance(this);
+	defMat.id="SceneDefaultMaterial";
+	defMat.setAmbient(0.7, 0.7, 0.7, 1.0);
+	defMat.setDiffuse(0.4, 0.4, 0.4, 1.0);
+	defMat.setSpecular(0.4, 0.4, 0.4, 1.0);
+	defMat.setShininess(10.0);
+	defMat.setEmission(0, 0, 0, 1);
+	
+	
+	this.MaterialArray.push(defMat);
+	
+	//Materiais do LSX
+	for (var i = 0; i < this.graph.Parser.Materials.length; i++){
+		
+		var newMat = new CGFappearance(this);
+		
+		newMat.id = this.graph.Parser.Materials[i].id;
+		newMat.setAmbient(this.graph.Parser.Materials[i].ambient[0],
+									this.graph.Parser.Materials[i].ambient[1],
+									this.graph.Parser.Materials[i].ambient[2],
+									this.graph.Parser.Materials[i].ambient[3]);
+		newMat.setDiffuse(this.graph.Parser.Materials[i].diffuse[0],
+									this.graph.Parser.Materials[i].diffuse[1],
+									this.graph.Parser.Materials[i].diffuse[2],
+									this.graph.Parser.Materials[i].diffuse[3]);
+		newMat.setSpecular(this.graph.Parser.Materials[i].specular[0],
+									this.graph.Parser.Materials[i].specular[1],
+									this.graph.Parser.Materials[i].specular[2],
+									this.graph.Parser.Materials[i].specular[3]);	
+		newMat.setShininess(this.graph.Parser.Materials[i].shininess);
+		newMat.setEmission(this.graph.Parser.Materials[i].emission[0],
+							this.graph.Parser.Materials[i].emission[1],
+							this.graph.Parser.Materials[i].emission[2],
+							this.graph.Parser.Materials[i].emission[3]);
+		newMat.setTextureWrap('REPEAT', 'REPEAT');
+		
+		this.MaterialArray.push(newMat);
+	}
+	
+}
+
+	//-----------------------------------------------------//
+	//-----					LEAFS					-------//
+	//-----------------------------------------------------//
+
+LSXscene.prototype.Generate_Graph_Leafs = function (){
+	/*
+		Usa os valores da tag <LEAFS> do LSX para criar CGFObjects que ficam guardados na LeafArray.
+		
+		Todas as primitivas são guardadas no mesmo array independentemente do seu tipo.
+		Todas tem um valor de id que as identifica, igual ao dito no LSX.
+		
+	*/
+	
+	for (var i = 0; i < this.graph.Parser.Leaves.length; i++)
+	{
+		if (this.graph.Parser.Leaves[i].type == "rectangle")
+		{
+			var newRectangle = new SquarePrimitive(this, this.graph.Parser.Leaves[i].lt_x,
+														this.graph.Parser.Leaves[i].lt_y,
+														this.graph.Parser.Leaves[i].rb_x,
+														this.graph.Parser.Leaves[i].rb_y);
+			newRectangle.type = "rectangle";
+			newRectangle.id = this.graph.Parser.Leaves[i].id;
+			this.LeafArray.push(newRectangle);
+			
+		}
+		
+	
+		if (this.graph.Parser.Leaves[i].type == "cylinder")
+		{
+			var newCylinder = new CylinderPrimitive(this, this.graph.Parser.Leaves[i].parts,
+														this.graph.Parser.Leaves[i].sections, 
+														this.graph.Parser.Leaves[i].height, 
+														this.graph.Parser.Leaves[i].bot_radius,
+														this.graph.Parser.Leaves[i].top_radius);
+			
+			newCylinder.type = "cylinder";
+			newCylinder.id = this.graph.Parser.Leaves[i].id;
+			this.LeafArray.push(newCylinder);
+			
+		}
+		
+
+		if (this.graph.Parser.Leaves[i].type == "sphere")
+		{
+			var newSphere = new SpherePrimitive(this, 
+												this.graph.Parser.Leaves[i].parts,
+												this.graph.Parser.Leaves[i].sections,
+												this.graph.Parser.Leaves[i].radius);
+			newSphere.type = "sphere";
+			newSphere.id = this.graph.Parser.Leaves[i].id;
+			
+			this.LeafArray.push(newSphere);
+		}
+		
+		
+		if (this.graph.Parser.Leaves[i].type == "triangle")
+		{
+			var newTriangle = new TrianglePrimitive(this, 
+												this.graph.Parser.Leaves[i].p1_x,
+												this.graph.Parser.Leaves[i].p1_y,
+												this.graph.Parser.Leaves[i].p1_z,
+												this.graph.Parser.Leaves[i].p2_x,
+												this.graph.Parser.Leaves[i].p2_y,
+												this.graph.Parser.Leaves[i].p2_z,
+												this.graph.Parser.Leaves[i].p3_x,
+												this.graph.Parser.Leaves[i].p3_y,
+												this.graph.Parser.Leaves[i].p3_z);
+				
+			newTriangle.type = "triangle";
+			newTriangle.id = this.graph.Parser.Leaves[i].id;
+								
+			this.LeafArray.push(newTriangle);
+		}
+
+	}
+}
+
+
+
+	//-----------------------------------------------------//
+	//-----					NODES					-------//
+	//-----------------------------------------------------//
+
+LSXscene.prototype.Generate_Graph_Nodes = function (){
+	
+	/*
+		Usa os valores das tags <NODES> do LSX para criar objectos que ficam guardados na NodeArray.
+		
+		Todos os nodes são identificados pela sua propriedade id, identica à dita pelo LSX
+		
+	*/
+	
+	
+	//Store root in this.SceneNode_id
+	this.SceneNode_id = this.graph.Parser.Root_id;
+	
+	//make sure root is found
+	var found = false;
+	
+	//Generate every node
+	for (var i = 0; i < this.graph.Parser.Nodes.length; i++)
+	{
+		if (this.graph.Parser.Nodes[i].id == this.graph.Parser.Root_id)
+			found = true;
+		
+		
+		
+		var newNode = {};
+		
+		// id
+		newNode.id = this.graph.Parser.Nodes[i].id;
+		
+		//Material
+		newNode.materialID = this.graph.Parser.Nodes[i].material_id;
+		
+		//Texture
+		newNode.textureID = this.graph.Parser.Nodes[i].texture_id;
+		
+		//Transformations
+		newNode.transformations = [];
+		for (var j = 0; j < this.graph.Parser.Nodes[i].Transform.length; j++)
+		{
+			var newTransformation = {};
+			newTransformation.type = this.graph.Parser.Nodes[i].Transform[j].type;
+			
+			switch(this.graph.Parser.Nodes[i].Transform[j].type)
+			{
+			case 'translation':	
+				newTransformation.values = [];			
+				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].translation_x);
+				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].translation_y);
+				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].translation_z);
+				break;
+				
+			case 'rotation':
+				newTransformation.value = this.graph.Parser.Nodes[i].Transform[j].angle;
+				newTransformation.axis = this.graph.Parser.Nodes[i].Transform[j].axis;
+				break;
+				
+			case 'scale':
+				newTransformation.values = [];			
+				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].scale_x);
+				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].scale_y);
+				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].scale_z);
+				break;
+			default:
+				break;
+			}
+			
+			newNode.transformations.push(newTransformation);
+		}			
+		
+		
+		
+		//Descendents
+		newNode.childIDs = [];
+		for (var j = 0; j < this.graph.Parser.Nodes[i].Descendants.length; j++)
+			newNode.childIDs.push(this.graph.Parser.Nodes[i].Descendants[j]);
+		
+		
+		
+		this.NodeArray.push(newNode);
+	}
+	
+	if (!found)
+		console.log("There was no node with the Scene node's id!");
+	else
+		console.log("The Scene Graph is now loaded onto the Scene object. Length: " + this.NodeArray.length);
+	
+}
+
+
+	//-----------------------------------------------------//
+	//-----				GRAPH DISPLAY				-------//
+	//-----------------------------------------------------//
+	
+var degToRad = Math.PI / 180.0;
+	
+LSXscene.prototype.Display_Graph = function (){
+	/*
+		Encontra o Nó raiz da cena e faz Display_Node() desse, desencandeando o processo de recursividade.
+	
+	*/
+	for(var i = 0; i < this.NodeArray.length; i++)
+	{
+		if (this.NodeArray[i].id == this.SceneNode_id && this.SceneNode_id != null)
+			this.Display_Node(this.SceneNode_id);
+	}
+		
+	
+}
+
+LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, MaterialObject, TextureObject)
+{
+	/*
+		Processa as informações de um Node do grafo e chama recurssivamente os Nodes filhos. Se porventura o filho for uma folha do grafo,
+		chama em vez Display_Leaf(). Define portanto um comportamento de pesquisa em profundidade implicito.
+		
+		materiais e texturas: Encontra quais os materiais a que lhe correspondem ao nó em TextureArray e MaterialArray.
+		matriz transformações: Com uso de um Top() à stack de matrizes, cálcula a própria e guarda-a na stack para que os filhos a possam usar
+				
+	
+	*/
+	
+	
+	
+	for(var i = 0; i < this.NodeArray.length; i++)
+	{
+		if (this.NodeArray[i].id == NodeID) //Node is found, function starts and ends within this clause
+		{
+			
+			var MaterialUsed = null;
+			var TextureUsed = null;
+			var Texture_ID_sent = null;
+			
+			
+			//----------------------------------------------------Materials
+			if (NodeID == this.SceneNode_id && this.NodeArray[i].materialID == 'null')
+				MaterialUsed = this.MaterialArray[0];
+			else
+				if (this.NodeArray[i].materialID == 'null')
+					MaterialUsed = MaterialObject;
+				else
+					for(var j = 0; j < this.MaterialArray.length; j++)
+						if(this.MaterialArray[j].id == this.NodeArray[i].materialID)
+							MaterialUsed = this.MaterialArray[j];
+
+			
+			////----------------------------------------------------Textures
+			if(this.NodeArray[i].textureID == 'clear')
+				TextureUsed = null;
+			else if(this.NodeArray[i].textureID == 'null' && NodeID != this.SceneNode_id)
+				TextureUsed = TextureObject;
+			else
+				for(var j = 0; j < this.TextureArray.length; j++)
+					if(this.TextureArray[j].id == this.NodeArray[i].textureID)
+						TextureUsed = this.TextureArray[j];
+			
+			if (TextureUsed == null)
+				Texture_ID_sent = null;
+			else 
+				Texture_ID_sent = TextureUsed.id;
+			
+			
+			
+			////----------------------------------------------------Transformations
+			var Transformation_Matrix = this.popMatrix_m4();
+			this.pushMatrix_m4(Transformation_Matrix);		//Fazer o top() ao stack
+			
+			for(var j = 0; j < this.NodeArray[i].transformations.length; j++)
+			{
+				switch(this.NodeArray[i].transformations[j].type)
+				{
+				case 'translation':	
+					this.transformMatrix_m4(Transformation_Matrix, 'translation', 
+							this.NodeArray[i].transformations[j].values[0], 
+							this.NodeArray[i].transformations[j].values[1], 
+							this.NodeArray[i].transformations[j].values[2]);
+					break;
+					
+				case 'rotation':	
+					if(this.NodeArray[i].transformations[j].axis == 'x')
+						this.transformMatrix_m4(Transformation_Matrix, 'rotation', 1,0,0, this.NodeArray[i].transformations[j].value);
+					if(this.NodeArray[i].transformations[j].axis == 'y')
+						this.transformMatrix_m4(Transformation_Matrix, 'rotation', 0,1,0, this.NodeArray[i].transformations[j].value);
+					if(this.NodeArray[i].transformations[j].axis == 'z')
+						this.transformMatrix_m4(Transformation_Matrix, 'rotation', 0,0,1, this.NodeArray[i].transformations[j].value);
+					break;
+						
+				case 'scale':
+					this.transformMatrix_m4(Transformation_Matrix, 'scale', 
+							this.NodeArray[i].transformations[j].values[0], 
+							this.NodeArray[i].transformations[j].values[1], 
+							this.NodeArray[i].transformations[j].values[2]);
+					break;
+				
+				default:	
+					break;	
+				}
+				
+			}
+			
+			//Store own transformation matrix for children use
+			this.pushMatrix_m4(Transformation_Matrix);
+
+			
+			////----------------------------------------------------Children
+			
+			for(var j = 0; j < this.NodeArray[i].childIDs.length; j++)
+			{
+				var Selected_Child_ID = this.NodeArray[i].childIDs[j];
+				var found = false;
+				
+				//Child is a node
+				for (var k = 0; k < this.NodeArray.length; k++)
+				{
+					if (Selected_Child_ID == this.NodeArray[k].id)
+					{
+						this.Display_Node(Selected_Child_ID, 
+									MaterialUsed.id,
+									Texture_ID_sent,
+									MaterialUsed,
+									TextureUsed);
+						found = true;
+					}
+						
+				}
+				
+				//Child is a leaf
+				for (var k = 0; k < this.LeafArray.length; k++)
+				{
+					if (Selected_Child_ID == this.LeafArray[k].id)
+					{
+						this.Display_Leaf(Selected_Child_ID,
+									MaterialUsed,
+									TextureUsed);
+						found = true;
+					}
+						
+				}
+				
+				
+				if (!found)
+					console.log("A child in node "+ NodeID + " with the id: " + Selected_Child_ID + " wasnt found in the graph!");
+				
+			}
+			
+			////----------------------------------------------------End
+			//Get rid of own transformation matrix
+			this.popMatrix_m4();
+		}
+	}
+
+}
+
+LSXscene.prototype.Display_Leaf = function (id, MaterialObject, TextureObject){
+		/*
+			O objectivo final desta função é fazer o display() de uma primitiva e voltar atrás ao Node() mãe para continuar.
+			Três outras tarefas ocorrem antes: 	Aplicar o material do Node, 
+												aplicar a textura do Node atendendo ao seu factor de escala,
+												aplicar as tranformações da cena e todos os nós ao objecto.
+	
+		*/
+	
+	for(var i = 0; i < this.LeafArray.length; i++)
+	{
+		if (this.LeafArray[i].id == id) //Child is found, function starts and ends within this clause
+		{ 	
+			this.popMatrix();
+			this.pushMatrix();
+			var Transformation_Matrix = this.popMatrix_m4();
+			this.pushMatrix_m4(Transformation_Matrix);		//Fazer o top() ao stack
+			
+			
+			//Material
+			MaterialObject.apply();
+			
+			//Texture
+			if (TextureObject != null)
+			{
+				if(this.LeafArray[i].type == "rectangle" || this.LeafArray[i].type == "triangle")
+					this.LeafArray[i].updateTexCoords(TextureObject.factor_s, TextureObject.factor_t);
+				TextureObject.bind();
+			}
+			if (this.LeafArray[i].type == 'sphere')
+				this.transformMatrix_m4(Transformation_Matrix, 'rotation', 1,0,0, 90);
+	
+			//Transform
+			this.multMatrix(Transformation_Matrix); 
+			
+			
+			//Display
+			this.LeafArray[i].display();
+		}
+	}
+}
+
+	
+	//-----------------------------------------------------//
+	//-----				MATRIX STACK				-------//
+	//-----------------------------------------------------//
+LSXscene.prototype.pushMatrix_m4 = function(someMatrix) {
+        var copy = mat4.create();
+        mat4.copy(copy, someMatrix);
+        this.mvMatrixStack.push(copy);
+    }
+ 
+LSXscene.prototype.popMatrix_m4 = function() {
+        if (this.mvMatrixStack.length == 0) {
+            throw "Invalid popMatrix!";
+        }
+        return this.mvMatrixStack.pop();
+    }
+
+LSXscene.prototype.transformMatrix_m4 = function(matrix, transformtype, value_x, value_y, value_z, angle) {
+	
+	switch(transformtype)
+	{
+	case 'translation':
+		mat4.translate(matrix, matrix, [value_x,value_y,value_z]);
+		break;
+	case 'rotation':
+		mat4.rotate(matrix, matrix, angle*degToRad, [value_x,value_y,value_z]);
+		break;
+	case 'scale':
+		mat4.scale(matrix, matrix, [value_x,value_y,value_z]);
+		break;
+	default: 
+		throw "Invalid transformation!";
+		break;
+	}
+	
+	
+}
+
+
+
+

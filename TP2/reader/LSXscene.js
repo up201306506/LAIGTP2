@@ -362,7 +362,9 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 														this.graph.Parser.Leaves[i].rb_y);
 			newRectangle.type = "rectangle";
 			newRectangle.id = this.graph.Parser.Leaves[i].id;
+			
 			this.LeafArray.push(newRectangle);
+			this.LeafArray[newRectangle.id] = newRectangle;
 			
 		}
 		
@@ -377,8 +379,9 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			
 			newCylinder.type = "cylinder";
 			newCylinder.id = this.graph.Parser.Leaves[i].id;
-			this.LeafArray.push(newCylinder);
 			
+			this.LeafArray.push(newCylinder);
+			this.LeafArray[newCylinder.id] = newCylinder;
 		}
 		
 
@@ -392,6 +395,7 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			newSphere.id = this.graph.Parser.Leaves[i].id;
 			
 			this.LeafArray.push(newSphere);
+			this.LeafArray[newSphere.id] = newSphere;
 		}
 		
 		
@@ -412,6 +416,7 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			newTriangle.id = this.graph.Parser.Leaves[i].id;
 								
 			this.LeafArray.push(newTriangle);
+			this.LeafArray[newTriangle.id] = newTriangle;
 		}
 
 	}
@@ -595,20 +600,18 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 				}
 				
 				//Child is a leaf
-				for (var k = 0; k < this.LeafArray.length; k++)
+				
+				
+				if (this.LeafArray[Selected_Child_ID] != undefined)
 				{
 					this.pushMatrix();
-					if (Selected_Child_ID == this.LeafArray[k].id)
-					{
-						this.Display_Leaf(Selected_Child_ID,
-									MaterialUsed,
-									TextureUsed);
-						found = true;
-					}
-					this.popMatrix();		
+					this.Display_Leaf(Selected_Child_ID,
+								MaterialUsed,
+								TextureUsed);
+					found = true;
+					this.popMatrix();
 				}
-				
-				
+
 				if (!found)
 					console.log("A child in node "+ NodeID + " with the id: " + Selected_Child_ID + " wasnt found in the graph!");	
 			}
@@ -626,29 +629,24 @@ LSXscene.prototype.Display_Leaf = function (id, MaterialObject, TextureObject){
 												aplicar as tranformações da cena e todos os nós ao objecto.
 	
 		*/
+
 	
-	for(var i = 0; i < this.LeafArray.length; i++)
+	//Material
+	MaterialObject.apply();
+	
+	//Texture
+	if (TextureObject != null)
 	{
-		if (this.LeafArray[i].id == id) //Child is found, function starts and ends within this clause
-		{ 	
-			//Material
-			MaterialObject.apply();
-			
-			//Texture
-			if (TextureObject != null)
-			{
-				if(this.LeafArray[i].type == "rectangle" || this.LeafArray[i].type == "triangle")
-					this.LeafArray[i].updateTexCoords(TextureObject.factor_s, TextureObject.factor_t);
-				TextureObject.bind();
-			}
-			if (this.LeafArray[i].type == 'sphere')	
-				this.rotate(90*degToRad,1,0,0);
-			
-			
-			//Display
-			this.LeafArray[i].display();
-		}
+		if(this.LeafArray[id].type == "rectangle" || this.LeafArray[id].type == "triangle")
+			this.LeafArray[id].updateTexCoords(TextureObject.factor_s, TextureObject.factor_t);
+		TextureObject.bind();
 	}
+	if (this.LeafArray[id].type == 'sphere')	
+		this.rotate(90*degToRad,1,0,0);
+	
+	
+	//Display
+	this.LeafArray[id].display();
 }
 
 	

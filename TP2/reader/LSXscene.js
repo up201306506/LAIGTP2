@@ -126,7 +126,7 @@ LSXscene.prototype.display = function () {
 		//Display do Grafo
 		this.pushMatrix();
 		this.multMatrix(this.Initial_Transform); 
-		this.Display_Graph();
+		this.Display_Node(this.SceneNode_id);
 		
 		if (this.graph.loadedOk && this.graph.Parser.Initials.axis_length > 0)
 			this.axis.display();
@@ -517,20 +517,6 @@ LSXscene.prototype.Generate_Graph_Nodes = function (){
 	//-----------------------------------------------------//
 	
 var degToRad = Math.PI / 180.0;
-	
-LSXscene.prototype.Display_Graph = function (){
-	/*
-		Encontra o Nó raiz da cena e faz Display_Node() desse, desencandeando o processo de recursividade.
-	
-	*/
-	for(var i = 0; i < this.NodeArray.length; i++)
-	{
-		if (this.NodeArray[i].id == this.SceneNode_id && this.SceneNode_id != null)
-			this.Display_Node(this.SceneNode_id);
-	}
-		
-	
-}
 
 LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, MaterialObject, TextureObject){
 	/*

@@ -646,15 +646,15 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 		
 		
 		var str = Leaf_Node.attributes.getNamedItem('args').value;
-		str = str.split(" ");	
+		var arg_list = str.match(/\S+/g);
 		switch(this.Parser.Leaves[i].type)
 		{			
 			//------------	rectangle		---------------
 		case "rectangle":
-			this.Parser.Leaves[i].lt_x = parseFloat(str[0]);
-			this.Parser.Leaves[i].lt_y = parseFloat(str[1]);
-			this.Parser.Leaves[i].rb_x = parseFloat(str[2]);
-			this.Parser.Leaves[i].rb_y = parseFloat(str[3]);
+			this.Parser.Leaves[i].lt_x = parseFloat(arg_list[0]);
+			this.Parser.Leaves[i].lt_y = parseFloat(arg_list[1]);
+			this.Parser.Leaves[i].rb_x = parseFloat(arg_list[2]);
+			this.Parser.Leaves[i].rb_y = parseFloat(arg_list[3]);
 			console.log("	Values: lt_x=" + this.Parser.Leaves[i].lt_x +
 								", lt_y=" + this.Parser.Leaves[i].lt_y +
 								", rb_x=" + this.Parser.Leaves[i].rb_x +
@@ -664,11 +664,11 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 		
 			//------------	cylinder		---------------
 		case "cylinder":
-			this.Parser.Leaves[i].height = parseFloat(str[0]);
-			this.Parser.Leaves[i].bot_radius = parseFloat(str[1]);
-			this.Parser.Leaves[i].top_radius = parseFloat(str[2]);
-			this.Parser.Leaves[i].sections = parseFloat(str[3]);
-			this.Parser.Leaves[i].parts = parseFloat(str[4]);
+			this.Parser.Leaves[i].height = parseFloat(arg_list[0]);
+			this.Parser.Leaves[i].bot_radius = parseFloat(arg_list[1]);
+			this.Parser.Leaves[i].top_radius = parseFloat(arg_list[2]);
+			this.Parser.Leaves[i].sections = parseFloat(arg_list[3]);
+			this.Parser.Leaves[i].parts = parseFloat(arg_list[4]);
 			console.log("	Values: height=" + this.Parser.Leaves[i].height +
 								", bot_radius=" + this.Parser.Leaves[i].bot_radius +
 								", top_radius=" + this.Parser.Leaves[i].top_radius +
@@ -679,9 +679,9 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 		
 			//------------	sphere			---------------
 		case "sphere":
-			this.Parser.Leaves[i].radius = parseFloat(str[0]);
-			this.Parser.Leaves[i].sections = parseFloat(str[1]);
-			this.Parser.Leaves[i].parts = parseFloat(str[2]);
+			this.Parser.Leaves[i].radius = parseFloat(arg_list[0]);
+			this.Parser.Leaves[i].sections = parseFloat(arg_list[1]);
+			this.Parser.Leaves[i].parts = parseFloat(arg_list[2]);
 			console.log("	Values: radius=" + this.Parser.Leaves[i].radius +
 								", sections=" + this.Parser.Leaves[i].sections +
 								", parts=" + this.Parser.Leaves[i].parts 
@@ -689,21 +689,17 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 			break;
 			
 			//------------	triangle		---------------	
-			// (Not Working yet, Romano suggested using "coordArray = s.match(/\S+/g);" for the split instead)
 		
-		case "triangle":
-			var temp_cordinate_string = Leaf_Node.attributes.getNamedItem('args').value;
-			var coordinate_list = temp_cordinate_string.match(/\S+/g);
-		
-			this.Parser.Leaves[i].p1_x = parseFloat(coordinate_list[0]);
-			this.Parser.Leaves[i].p1_y = parseFloat(coordinate_list[1]);
-			this.Parser.Leaves[i].p1_z = parseFloat(coordinate_list[2]);
-			this.Parser.Leaves[i].p2_x = parseFloat(coordinate_list[3]);
-			this.Parser.Leaves[i].p2_y = parseFloat(coordinate_list[4]);
-			this.Parser.Leaves[i].p2_z = parseFloat(coordinate_list[5]);
-			this.Parser.Leaves[i].p3_x = parseFloat(coordinate_list[6]);
-			this.Parser.Leaves[i].p3_y = parseFloat(coordinate_list[7]);
-			this.Parser.Leaves[i].p3_z = parseFloat(coordinate_list[8]);
+		case "triangle":		
+			this.Parser.Leaves[i].p1_x = parseFloat(arg_list[0]);
+			this.Parser.Leaves[i].p1_y = parseFloat(arg_list[1]);
+			this.Parser.Leaves[i].p1_z = parseFloat(arg_list[2]);
+			this.Parser.Leaves[i].p2_x = parseFloat(arg_list[3]);
+			this.Parser.Leaves[i].p2_y = parseFloat(arg_list[4]);
+			this.Parser.Leaves[i].p2_z = parseFloat(arg_list[5]);
+			this.Parser.Leaves[i].p3_x = parseFloat(arg_list[6]);
+			this.Parser.Leaves[i].p3_y = parseFloat(arg_list[7]);
+			this.Parser.Leaves[i].p3_z = parseFloat(arg_list[8]);
 			console.log("	Values: p1_x=" + this.Parser.Leaves[i].p1_x +
 								", p1_y=" + this.Parser.Leaves[i].p1_y +
 								", p1_z=" + this.Parser.Leaves[i].p1_z +

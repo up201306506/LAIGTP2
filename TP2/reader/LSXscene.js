@@ -272,17 +272,19 @@ LSXscene.prototype.Read_Graph_Textures = function (){
 		Usa os valores da tag <TEXTURES> do LSX para criar objectos CGFtexture qe ficam guardado na TextureArray.
 		
 	*/
-	
+
 	for (var i = 0; i < this.graph.Parser.Textures.length; i++)
 	{
-		this.TextureArray[i] = new CGFtexture(this, this.graph.Parser.Textures[i].path);
+		var newText = new CGFtexture(this, this.graph.Parser.Textures[i].path);
 		
 		
-		this.TextureArray[i].id = this.graph.Parser.Textures[i].id;
-		this.TextureArray[i].factor_s = this.graph.Parser.Textures[i].factor_s;
-		this.TextureArray[i].factor_t = this.graph.Parser.Textures[i].factor_t;
+		newText.id = this.graph.Parser.Textures[i].id;
+		newText.factor_s = this.graph.Parser.Textures[i].factor_s;
+		newText.factor_t = this.graph.Parser.Textures[i].factor_t;
+		this.TextureArray[newText.id] = newText;		
 	
 	}
+	
 }
 
 	//-----------------------------------------------------//
@@ -559,10 +561,8 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 			else if(this.NodeArray[i].textureID == 'null' && NodeID != this.SceneNode_id)
 				TextureUsed = TextureObject;
 			else
-				for(var j = 0; j < this.TextureArray.length; j++)
-					if(this.TextureArray[j].id == this.NodeArray[i].textureID)
-						TextureUsed = this.TextureArray[j];
-			
+				TextureUsed = this.TextureArray[this.NodeArray[i].textureID];
+				
 			if (TextureUsed == null)
 				Texture_ID_sent = null;
 			else 

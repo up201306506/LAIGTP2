@@ -276,7 +276,7 @@ LSXscene.prototype.Read_Graph_Textures = function (){
 	for (var i = 0; i < this.graph.Parser.Textures.length; i++)
 	{
 		var newText = new CGFtexture(this, this.graph.Parser.Textures[i].path);
-		
+
 		
 		newText.id = this.graph.Parser.Textures[i].id;
 		newText.factor_s = this.graph.Parser.Textures[i].factor_s;
@@ -307,8 +307,6 @@ LSXscene.prototype.Read_Graph_Materials = function (){
 	defMat.setSpecular(0.4, 0.4, 0.4, 1.0);
 	defMat.setShininess(10.0);
 	defMat.setEmission(0, 0, 0, 1);
-	
-	
 	this.MaterialArray.push(defMat);
 	
 	//Materiais do LSX
@@ -336,7 +334,7 @@ LSXscene.prototype.Read_Graph_Materials = function (){
 							this.graph.Parser.Materials[i].emission[3]);
 		newMat.setTextureWrap('REPEAT', 'REPEAT');
 		
-		this.MaterialArray.push(newMat);
+		this.MaterialArray[newMat.id] = newMat;
 	}
 	
 }
@@ -550,9 +548,7 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 				if (this.NodeArray[i].materialID == 'null')
 					MaterialUsed = MaterialObject;
 				else
-					for(var j = 0; j < this.MaterialArray.length; j++)
-						if(this.MaterialArray[j].id == this.NodeArray[i].materialID)
-							MaterialUsed = this.MaterialArray[j];
+					MaterialUsed = this.MaterialArray[this.NodeArray[i].materialID];
 
 			
 			////----------------------------------------------------Textures

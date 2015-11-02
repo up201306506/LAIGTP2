@@ -600,9 +600,7 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 				}
 				
 				//Child is a leaf
-				
-				
-				if (this.LeafArray[Selected_Child_ID] != undefined)
+				if (typeof this.LeafArray[Selected_Child_ID] != "undefined")
 				{
 					this.pushMatrix();
 					this.Display_Leaf(Selected_Child_ID,
@@ -611,6 +609,7 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 					found = true;
 					this.popMatrix();
 				}
+				
 
 				if (!found)
 					console.log("A child in node "+ NodeID + " with the id: " + Selected_Child_ID + " wasnt found in the graph!");	

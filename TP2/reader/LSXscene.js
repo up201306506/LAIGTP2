@@ -463,40 +463,40 @@ LSXscene.prototype.Generate_Graph_Nodes = function (){
 		//Texture
 		newNode.textureID = this.graph.Parser.Nodes[i].texture_id;
 		
-		//Transformations
-		newNode.transformations = [];
+		
+		//Transformation Matrix		
+		var newMatrix = mat4.create();
+		mat4.identity(newMatrix);
 		for (var j = 0; j < this.graph.Parser.Nodes[i].Transform.length; j++)
 		{
-			var newTransformation = {};
-			newTransformation.type = this.graph.Parser.Nodes[i].Transform[j].type;
-			
 			switch(this.graph.Parser.Nodes[i].Transform[j].type)
 			{
 			case 'translation':	
-				newTransformation.values = [];			
-				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].translation_x);
-				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].translation_y);
-				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].translation_z);
+				this.transformMatrix_m4(newMatrix, 'translation', 
+								this.graph.Parser.Nodes[i].Transform[j].translation_x, 
+								this.graph.Parser.Nodes[i].Transform[j].translation_y, 
+								this.graph.Parser.Nodes[i].Transform[j].translation_z);
 				break;
-				
 			case 'rotation':
-				newTransformation.value = this.graph.Parser.Nodes[i].Transform[j].angle;
-				newTransformation.axis = this.graph.Parser.Nodes[i].Transform[j].axis;
+					if(this.graph.Parser.Nodes[i].Transform[j].axis == 'x')
+							this.transformMatrix_m4(newMatrix, 'rotation', 1,0,0, this.graph.Parser.Nodes[i].Transform[j].angle);
+						if(this.graph.Parser.Nodes[i].Transform[j].axis == 'y')
+							this.transformMatrix_m4(newMatrix, 'rotation', 0,1,0, this.graph.Parser.Nodes[i].Transform[j].angle);
+						if(this.graph.Parser.Nodes[i].Transform[j].axis == 'z')
+							this.transformMatrix_m4(newMatrix, 'rotation', 0,0,1, this.graph.Parser.Nodes[i].Transform[j].angle);
 				break;
 				
 			case 'scale':
-				newTransformation.values = [];			
-				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].scale_x);
-				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].scale_y);
-				newTransformation.values.push(this.graph.Parser.Nodes[i].Transform[j].scale_z);
+				this.transformMatrix_m4(newMatrix, 'scale', 
+							this.graph.Parser.Nodes[i].Transform[j].scale_x, 
+							this.graph.Parser.Nodes[i].Transform[j].scale_y,
+							this.graph.Parser.Nodes[i].Transform[j].scale_z);
 				break;
 			default:
 				break;
 			}
-			
-			newNode.transformations.push(newTransformation);
-		}			
-		
+		}
+		newNode.transformationMatrix = newMatrix;
 		
 		
 		//Descendents
@@ -592,40 +592,9 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 			
 			////----------------------------------------------------Transformations
 			var Transformation_Matrix = this.popMatrix_m4();
-			this.pushMatrix_m4(Transformation_Matrix);		//Fazer o top() ao stack
+			this.pushMatrix_m4(Transformation_Matrix);		//Fazer o top() ao stack			
 			
-			for(var j = 0; j < this.NodeArray[i].transformations.length; j++)
-			{
-				switch(this.NodeArray[i].transformations[j].type)
-				{
-				case 'translation':	
-					this.transformMatrix_m4(Transformation_Matrix, 'translation', 
-							this.NodeArray[i].transformations[j].values[0], 
-							this.NodeArray[i].transformations[j].values[1], 
-							this.NodeArray[i].transformations[j].values[2]);
-					break;
-					
-				case 'rotation':	
-					if(this.NodeArray[i].transformations[j].axis == 'x')
-						this.transformMatrix_m4(Transformation_Matrix, 'rotation', 1,0,0, this.NodeArray[i].transformations[j].value);
-					if(this.NodeArray[i].transformations[j].axis == 'y')
-						this.transformMatrix_m4(Transformation_Matrix, 'rotation', 0,1,0, this.NodeArray[i].transformations[j].value);
-					if(this.NodeArray[i].transformations[j].axis == 'z')
-						this.transformMatrix_m4(Transformation_Matrix, 'rotation', 0,0,1, this.NodeArray[i].transformations[j].value);
-					break;
-						
-				case 'scale':
-					this.transformMatrix_m4(Transformation_Matrix, 'scale', 
-							this.NodeArray[i].transformations[j].values[0], 
-							this.NodeArray[i].transformations[j].values[1], 
-							this.NodeArray[i].transformations[j].values[2]);
-					break;
-				
-				default:	
-					break;	
-				}
-				
-			}
+			mat4.multiply(Transformation_Matrix, Transformation_Matrix, this.NodeArray[i].transformationMatrix);	
 			
 			//Store own transformation matrix for children use
 			this.pushMatrix_m4(Transformation_Matrix);

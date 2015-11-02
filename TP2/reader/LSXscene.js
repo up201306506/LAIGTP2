@@ -123,20 +123,15 @@ LSXscene.prototype.display = function () {
 	if (this.graph.loadedOk && true)
 	{	
 
-		//O aspecto original da cena e as suas transformações são guardadas em stacks pois os seus valores são necessários no multiplos passos do Display_Graph()
-		this.pushMatrix();
-		this.pushMatrix_m4(this.Initial_Transform);
-		
 		//Display do Grafo
+		this.pushMatrix();
+		this.multMatrix(this.Initial_Transform); 
 		this.Display_Graph();
-				
-				
-				
-		//Eixos devem ser gerados após a matriz de transformações iniciais serem aplicadas.
-		this.popMatrix();  //-perspectiva original
-		this.multMatrix(this.popMatrix_m4()); 
+		
 		if (this.graph.loadedOk && this.graph.Parser.Initials.axis_length > 0)
 			this.axis.display();
+		
+		this.popMatrix();  //-perspectiva original
 		
 		
 	}
@@ -537,8 +532,7 @@ LSXscene.prototype.Display_Graph = function (){
 	
 }
 
-LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, MaterialObject, TextureObject)
-{
+LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, MaterialObject, TextureObject){
 	/*
 		Processa as informações de um Node do grafo e chama recurssivamente os Nodes filhos. Se porventura o filho for uma folha do grafo,
 		chama em vez Display_Leaf(). Define portanto um comportamento de pesquisa em profundidade implicito.
@@ -591,14 +585,9 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 			
 			
 			////----------------------------------------------------Transformations
-			var Transformation_Matrix = this.popMatrix_m4();
-			this.pushMatrix_m4(Transformation_Matrix);		//Fazer o top() ao stack			
+			this.multMatrix(this.NodeArray[i].transformationMatrix);
 			
-			mat4.multiply(Transformation_Matrix, Transformation_Matrix, this.NodeArray[i].transformationMatrix);	
 			
-			//Store own transformation matrix for children use
-			this.pushMatrix_m4(Transformation_Matrix);
-
 			
 			////----------------------------------------------------Children
 			
@@ -606,10 +595,11 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 			{
 				var Selected_Child_ID = this.NodeArray[i].childIDs[j];
 				var found = false;
-				
+						
 				//Child is a node
 				for (var k = 0; k < this.NodeArray.length; k++)
 				{
+					this.pushMatrix();
 					if (Selected_Child_ID == this.NodeArray[k].id)
 					{
 						this.Display_Node(Selected_Child_ID, 
@@ -619,12 +609,13 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 									TextureUsed);
 						found = true;
 					}
-						
+					this.popMatrix();	
 				}
 				
 				//Child is a leaf
 				for (var k = 0; k < this.LeafArray.length; k++)
 				{
+					this.pushMatrix();
 					if (Selected_Child_ID == this.LeafArray[k].id)
 					{
 						this.Display_Leaf(Selected_Child_ID,
@@ -632,18 +623,14 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 									TextureUsed);
 						found = true;
 					}
-						
+					this.popMatrix();		
 				}
 				
 				
 				if (!found)
-					console.log("A child in node "+ NodeID + " with the id: " + Selected_Child_ID + " wasnt found in the graph!");
-				
+					console.log("A child in node "+ NodeID + " with the id: " + Selected_Child_ID + " wasnt found in the graph!");	
 			}
-			
 			////----------------------------------------------------End
-			//Get rid of own transformation matrix
-			this.popMatrix_m4();
 		}
 	}
 
@@ -662,12 +649,6 @@ LSXscene.prototype.Display_Leaf = function (id, MaterialObject, TextureObject){
 	{
 		if (this.LeafArray[i].id == id) //Child is found, function starts and ends within this clause
 		{ 	
-			this.popMatrix();
-			this.pushMatrix();
-			var Transformation_Matrix = this.popMatrix_m4();
-			this.pushMatrix_m4(Transformation_Matrix);		//Fazer o top() ao stack
-			
-			
 			//Material
 			MaterialObject.apply();
 			
@@ -678,11 +659,8 @@ LSXscene.prototype.Display_Leaf = function (id, MaterialObject, TextureObject){
 					this.LeafArray[i].updateTexCoords(TextureObject.factor_s, TextureObject.factor_t);
 				TextureObject.bind();
 			}
-			if (this.LeafArray[i].type == 'sphere')
-				this.transformMatrix_m4(Transformation_Matrix, 'rotation', 1,0,0, 90);
-	
-			//Transform
-			this.multMatrix(Transformation_Matrix); 
+			if (this.LeafArray[i].type == 'sphere')	
+				this.rotate(90*degToRad,1,0,0);
 			
 			
 			//Display
@@ -695,19 +673,27 @@ LSXscene.prototype.Display_Leaf = function (id, MaterialObject, TextureObject){
 	//-----------------------------------------------------//
 	//-----				MATRIX STACK				-------//
 	//-----------------------------------------------------//
+
 LSXscene.prototype.pushMatrix_m4 = function(someMatrix) {
+		/*
+			Função abandonada
+		*/
         var copy = mat4.create();
         mat4.copy(copy, someMatrix);
         this.mvMatrixStack.push(copy);
     }
  
 LSXscene.prototype.popMatrix_m4 = function() {
-        if (this.mvMatrixStack.length == 0) {
+        /*
+			Função abandonada
+		*/
+		if (this.mvMatrixStack.length == 0) {
             throw "Invalid popMatrix!";
         }
         return this.mvMatrixStack.pop();
     }
 
+	
 LSXscene.prototype.transformMatrix_m4 = function(matrix, transformtype, value_x, value_y, value_z, angle) {
 	
 	switch(transformtype)

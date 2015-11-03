@@ -363,7 +363,6 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			newRectangle.type = "rectangle";
 			newRectangle.id = this.graph.Parser.Leaves[i].id;
 			
-			this.LeafArray.push(newRectangle);
 			this.LeafArray[newRectangle.id] = newRectangle;
 			
 		}
@@ -380,7 +379,6 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			newCylinder.type = "cylinder";
 			newCylinder.id = this.graph.Parser.Leaves[i].id;
 			
-			this.LeafArray.push(newCylinder);
 			this.LeafArray[newCylinder.id] = newCylinder;
 		}
 		
@@ -394,7 +392,6 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			newSphere.type = "sphere";
 			newSphere.id = this.graph.Parser.Leaves[i].id;
 			
-			this.LeafArray.push(newSphere);
 			this.LeafArray[newSphere.id] = newSphere;
 		}
 		
@@ -415,7 +412,6 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			newTriangle.type = "triangle";
 			newTriangle.id = this.graph.Parser.Leaves[i].id;
 								
-			this.LeafArray.push(newTriangle);
 			this.LeafArray[newTriangle.id] = newTriangle;
 		}
 
@@ -505,8 +501,7 @@ LSXscene.prototype.Generate_Graph_Nodes = function (){
 			newNode.childIDs.push(this.graph.Parser.Nodes[i].Descendants[j]);
 		
 		
-		
-		this.NodeArray.push(newNode);
+		this.NodeArray[newNode.id] = newNode;
 	}
 	
 	if (!found)
@@ -533,91 +528,85 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 				
 	
 	*/
-	
-	
-	
-	for(var i = 0; i < this.NodeArray.length; i++)
+	if (typeof this.NodeArray[NodeID] === "undefined") //Node is found, function starts and ends within this clause
 	{
-		if (this.NodeArray[i].id == NodeID) //Node is found, function starts and ends within this clause
-		{
-			
-			var MaterialUsed = null;
-			var TextureUsed = null;
-			var Texture_ID_sent = null;
-			
-			
-			//----------------------------------------------------Materials
-			if (NodeID == this.SceneNode_id && this.NodeArray[i].materialID == 'null')
-				MaterialUsed = this.MaterialArray[0];
-			else
-				if (this.NodeArray[i].materialID == 'null')
-					MaterialUsed = MaterialObject;
-				else
-					MaterialUsed = this.MaterialArray[this.NodeArray[i].materialID];
-
-			
-			////----------------------------------------------------Textures
-			if(this.NodeArray[i].textureID == 'clear')
-				TextureUsed = null;
-			else if(this.NodeArray[i].textureID == 'null' && NodeID != this.SceneNode_id)
-				TextureUsed = TextureObject;
-			else
-				TextureUsed = this.TextureArray[this.NodeArray[i].textureID];
-				
-			if (TextureUsed == null)
-				Texture_ID_sent = null;
-			else 
-				Texture_ID_sent = TextureUsed.id;
-			
-			
-			
-			////----------------------------------------------------Transformations
-			this.multMatrix(this.NodeArray[i].transformationMatrix);
-			
-			
-			
-			////----------------------------------------------------Children
-			
-			for(var j = 0; j < this.NodeArray[i].childIDs.length; j++)
-			{
-				var Selected_Child_ID = this.NodeArray[i].childIDs[j];
-				var found = false;
-						
-				//Child is a node
-				for (var k = 0; k < this.NodeArray.length; k++)
-				{
-					this.pushMatrix();
-					if (Selected_Child_ID == this.NodeArray[k].id)
-					{
-						this.Display_Node(Selected_Child_ID, 
-									MaterialUsed.id,
-									Texture_ID_sent,
-									MaterialUsed,
-									TextureUsed);
-						found = true;
-					}
-					this.popMatrix();	
-				}
-				
-				//Child is a leaf
-				if (typeof this.LeafArray[Selected_Child_ID] != "undefined")
-				{
-					this.pushMatrix();
-					this.Display_Leaf(Selected_Child_ID,
-								MaterialUsed,
-								TextureUsed);
-					found = true;
-					this.popMatrix();
-				}
-				
-
-				if (!found)
-					console.log("A child in node "+ NodeID + " with the id: " + Selected_Child_ID + " wasnt found in the graph!");	
-			}
-			////----------------------------------------------------End
-		}
+		console.log("Node of ID:" + NodeID + ", is missing. That can't be good!");
+		return;
 	}
+		
+	var MaterialUsed = null;
+	var TextureUsed = null;
+	var Texture_ID_sent = null;
+	
+	//----------------------------------------------------Materials
+	if (NodeID == this.SceneNode_id && this.NodeArray[NodeID].materialID == 'null')
+		MaterialUsed = this.MaterialArray[0];
+	else
+		if (this.NodeArray[NodeID].materialID == 'null')
+			MaterialUsed = MaterialObject;
+		else
+			MaterialUsed = this.MaterialArray[this.NodeArray[NodeID].materialID];
 
+	
+	////----------------------------------------------------Textures
+	if(this.NodeArray[NodeID].textureID == 'clear')
+		TextureUsed = null;
+	else if(this.NodeArray[NodeID].textureID == 'null' && NodeID != this.SceneNode_id)
+		TextureUsed = TextureObject;
+	else
+		TextureUsed = this.TextureArray[this.NodeArray[NodeID].textureID];
+		
+	if (TextureUsed == null)
+		Texture_ID_sent = null;
+	else 
+		Texture_ID_sent = TextureUsed.id;
+	
+	
+	
+	////----------------------------------------------------Transformations
+	this.multMatrix(this.NodeArray[NodeID].transformationMatrix);
+		
+		
+		
+	////----------------------------------------------------Children
+	
+	for(var j = 0; j < this.NodeArray[NodeID].childIDs.length; j++)
+	{
+		var Selected_Child_ID = this.NodeArray[NodeID].childIDs[j];
+		var found = false;
+				
+		//Child is a node
+		
+		if (typeof this.NodeArray[Selected_Child_ID] != "undefined")
+		{
+			this.pushMatrix();
+			this.Display_Node(Selected_Child_ID, 
+						MaterialUsed.id,
+						Texture_ID_sent,
+						MaterialUsed,
+						TextureUsed);
+			found = true;
+			this.popMatrix();
+		}
+		
+		//Child is a leaf
+		if (typeof this.LeafArray[Selected_Child_ID] != "undefined")
+		{
+			this.pushMatrix();
+			this.Display_Leaf(Selected_Child_ID,
+						MaterialUsed,
+						TextureUsed);
+			found = true;
+			this.popMatrix();
+		}
+		
+
+		if (!found)
+			console.log("A child in node "+ NodeID + " with the id: " + Selected_Child_ID + " wasnt found in the graph!");	
+	}
+		
+		
+	////----------------------------------------------------End
 }
 
 LSXscene.prototype.Display_Leaf = function (id, MaterialObject, TextureObject){

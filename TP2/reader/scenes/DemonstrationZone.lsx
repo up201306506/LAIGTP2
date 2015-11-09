@@ -101,8 +101,16 @@
 			<specular r=".9" g=".9" b=".9" a="1" /> 
 			<emission r="0" g="0" b="0" a="1" />
 		</MATERIAL>
-
 	</MATERIALS>
+	
+	<ANIMATIONS>
+		<animation id="Animation1" span="10.5" type="linear">
+			<controlpoint xx="1" yy="1" zz="1"/>
+		</animation>
+		
+		<animation id="Animation2" span="10.5" type="circular" center="1 2 3" radius="3" />
+	
+	</ANIMATIONS>
 
 
 	<LEAVES>

@@ -114,6 +114,10 @@ MySceneGraph.prototype.parseLSX= function(rootElement){
 	if (error != null)
 		return error;
 	
+	error = this.parseAnimations(rootElement);
+	if (error != null)
+		return error;
+	
 	error = this.parseLeaves(rootElement);
 	if (error != null)
 		return error;
@@ -164,8 +168,8 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	this.Parser.Initials.view_near = this.reader.getFloat(Init_frustum, 'near');
 	this.Parser.Initials.view_far = this.reader.getFloat(Init_frustum, 'far');
 	
-	console.log("Frustum values loaded: near=" + this.Parser.Initials.view_near
-							+ ", far=" +  this.Parser.Initials.view_far);
+	//console.log("Frustum values loaded: near=" + this.Parser.Initials.view_near
+	//						+ ", far=" +  this.Parser.Initials.view_far);
 
 	
 	//------------  translation -------------
@@ -181,9 +185,9 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	this.Parser.Initials.view_translation_yy = this.reader.getFloat(Init_translation, 'y');
 	this.Parser.Initials.view_translation_zz = this.reader.getFloat(Init_translation, 'z');
 
-	console.log("View Translation values loaded: x=" + this.Parser.view_translation_xx
-											+ ", y=" + this.Parser.view_translation_yy
-											+ ", z=" + this.Parser.view_translation_zz);
+	//console.log("View Translation values loaded: x=" + this.Parser.view_translation_xx
+	//										+ ", y=" + this.Parser.view_translation_yy
+	//										+ ", z=" + this.Parser.view_translation_zz);
 	
 	
 	//------------  rotation  ---------------
@@ -213,9 +217,9 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	{
 		return "View Rotation information was not correctly loaded, check the axis values in the rotation tags";
 	}
-	console.log("View Rotation values loaded: x=" + this.Parser.Initials.view_rotation_xx
-									+ ", y=" + this.Parser.Initials.view_rotation_yy
-									+ ", z=" + this.Parser.Initials.view_rotation_zz);
+	//console.log("View Rotation values loaded: x=" + this.Parser.Initials.view_rotation_xx
+	//								+ ", y=" + this.Parser.Initials.view_rotation_yy
+	//								+ ", z=" + this.Parser.Initials.view_rotation_zz);
 										
 										
 	
@@ -231,9 +235,9 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	this.Parser.Initials.view_scale_yy = this.reader.getFloat(Init_scale, 'sy');
 	this.Parser.Initials.view_scale_zz = this.reader.getFloat(Init_scale, 'sz');
 
-	console.log("View Scale values loaded: x=" + this.Parser.Initials.view_scale_xx
-											+ ", y=" + this.Parser.Initials.view_scale_yy
-											+ ", z=" + this.Parser.Initials.view_scale_zz);
+	//console.log("View Scale values loaded: x=" + this.Parser.Initials.view_scale_xx
+	//										+ ", y=" + this.Parser.Initials.view_scale_yy
+	//										+ ", z=" + this.Parser.Initials.view_scale_zz);
 	
 	
 	
@@ -245,7 +249,9 @@ MySceneGraph.prototype.parseInitials= function(rootElement) {
 	}
 	
 	this.Parser.Initials.axis_length = this.reader.getFloat(Init_reference[0], 'length'); 
-	console.log("Axis size values loaded: " + this.Parser.Initials.axis_length);
+	//console.log("Axis size values loaded: " + this.Parser.Initials.axis_length);
+	
+	console.log(this.Parser.Initials);
 	
 }
 
@@ -285,8 +291,8 @@ MySceneGraph.prototype.parseIllumination= function(rootElement){
 	this.Parser.Illumination.ambient[2] = this.reader.getFloat(illu_ambient, 'b');
 	this.Parser.Illumination.ambient[3] = this.reader.getFloat(illu_ambient, 'a');
 	
-	console.log("Ambient Light: Loaded RGBA values: ["+this.Parser.Illumination.ambient[0]+", "+this.Parser.Illumination.ambient[1]+", "
-				+this.Parser.Illumination.ambient[2]+", "+this.Parser.Illumination.ambient[3]+"]");
+	//console.log("Ambient Light: Loaded RGBA values: ["+this.Parser.Illumination.ambient[0]+", "+this.Parser.Illumination.ambient[1]+", "
+	//			+this.Parser.Illumination.ambient[2]+", "+this.Parser.Illumination.ambient[3]+"]");
 	
 	
 	//------------ background ---------------
@@ -302,8 +308,10 @@ MySceneGraph.prototype.parseIllumination= function(rootElement){
 	this.Parser.Illumination.background[1] = this.reader.getFloat(illu_background, 'g');
 	this.Parser.Illumination.background[2] = this.reader.getFloat(illu_background, 'b');
 	this.Parser.Illumination.background[3] = this.reader.getFloat(illu_background, 'a');
-	console.log("Background: Loaded RGBA values: ["+this.Parser.Illumination.background[0]+", "+this.Parser.Illumination.background[1]+", "
-				+this.Parser.Illumination.background[2]+", "+this.Parser.Illumination.background[3]+"]");
+	//console.log("Background: Loaded RGBA values: ["+this.Parser.Illumination.background[0]+", "+this.Parser.Illumination.background[1]+", "
+	//			+this.Parser.Illumination.background[2]+", "+this.Parser.Illumination.background[3]+"]");
+				
+	console.log(this.Parser.Illumination);
 
 	
 }
@@ -394,7 +402,7 @@ MySceneGraph.prototype.parseLights= function(rootElement){
 			this.Parser.Lights[i].specular[2] = this.reader.getFloat(Light_Node.getElementsByTagName('specular')[0], 'b');
 			this.Parser.Lights[i].specular[3] = this.reader.getFloat(Light_Node.getElementsByTagName('specular')[0], 'a');
 			
-			
+			/*
 			console.log(this.Parser.Lights[i].id + 
 							": enabled=" +this.Parser.Lights[i].enabled+ 
 							", position: [" + this.Parser.Lights[i].position[0] 
@@ -413,7 +421,8 @@ MySceneGraph.prototype.parseLights= function(rootElement){
 											+ ", " + this.Parser.Lights[i].specular[1] 
 											+ ", " + this.Parser.Lights[i].specular[2] 
 											+ ", " + this.Parser.Lights[i].specular[3]+ "]");
-			
+			*/
+			console.log(this.Parser.Lights[i]);
 		}
 	}
 }
@@ -473,11 +482,14 @@ MySceneGraph.prototype.parseTextures= function(rootElement){
 			this.Parser.Textures[i].factor_s = this.reader.getFloat(Texture_Node.getElementsByTagName('amplif_factor')[0], 's');
 			this.Parser.Textures[i].factor_t = this.reader.getFloat(Texture_Node.getElementsByTagName('amplif_factor')[0], 't');
 			
-			
+			/*
 			console.log(this.Parser.Textures[i].id
 					+": File path:" + this.Parser.Textures[i].path
 					+ " Amplification Factor: s=" + this.Parser.Textures[i].factor_s + " t=" + this.Parser.Textures[i].factor_t
 					);
+			*/
+			
+			console.log(this.Parser.Textures[i]);
 		}
 	}	
 }
@@ -500,7 +512,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 	
 	tempMaterials = tempMaterials[0].getElementsByTagName('MATERIAL');
 	var materamount = tempMaterials.length;
-	console.log("Found "+materamount+" Texture(s)");
+	console.log("Found "+materamount+" Material(s)");
 	
 	if (materamount > 0){
 		
@@ -561,7 +573,7 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 			
 			
 			
-			console.log(this.Parser.Materials[i].id +
+			/*console.log(this.Parser.Materials[i].id +
 					": shininess:" + this.Parser.Materials[i].shininess +
 					", specular: [" + this.Parser.Materials[i].specular[0] +
 									"," + this.Parser.Materials[i].specular[1] +
@@ -579,12 +591,98 @@ MySceneGraph.prototype.parseMaterials= function(rootElement){
 									"," + this.Parser.Materials[i].emission[1] +
 									"," + this.Parser.Materials[i].emission[2] +
 									"," + this.Parser.Materials[i].emission[3] + "]"
-					);
-			
+					);*/
+			console.log(this.Parser.Materials[i]);
 		}
 	}
 	
 	
+	
+	
+	
+}
+
+MySceneGraph.prototype.parseAnimations= function(rootElement){
+	//-----------------------------------------------
+		console.log("Parsing ANIMATIONS");
+	//-----------------------------------------------
+	
+	this.Parser.Animations = [];
+	
+	// <ANIMATIONS> must exist and be a singular tag
+	
+	var tempAnimations = rootElement.getElementsByTagName('ANIMATIONS');		
+	if (tempAnimations == null || tempAnimations.length != 1) {
+		return "<ANIMATIONS> is either missing or there's multiples of them. Length: " + tempAnimations.length;
+	}
+	
+	tempAnimations = tempAnimations[0].getElementsByTagName('animation');
+	var animationamount = tempAnimations.length;
+	console.log("Found "+animationamount+" Animation(s)");
+	
+	if (animationamount > 0){
+		for (var i = 0; i < animationamount; i++){
+			this.Parser.Animations[i] = {};
+			var Animation_Node = tempAnimations[i];	
+			/*
+				Values: 
+					* id: 			id				(text)
+					* span: 		span			(float)
+					* type: 		type			(text)
+						(linear)
+						* xx, yy, zz:		controlpoints[]		(float)(xyz)
+						(circular)
+						* center: 		center[]			(float)(xyz)
+						* radius: 		radius				(float)
+			*/
+			//------------	id				---------------
+			this.Parser.Animations[i].id = Animation_Node.attributes.getNamedItem('id').value;	
+				if (i > 0)
+					for (var j = 0; j < i; j++)
+						if (this.Parser.Animations[i].id == this.Parser.Animations[j].id)
+							return "Two Animations had the same id, indexes: "+ j  + " and " + i;
+						
+			//------------	span		---------------	
+			this.Parser.Animations[i].span = parseFloat(Animation_Node.attributes.getNamedItem('span').value);
+			
+			
+			//------------	type		---------------
+			this.Parser.Animations[i].type = Animation_Node.attributes.getNamedItem('type').value;
+			
+			if(this.Parser.Animations[i].type == "linear")
+			{
+				//------------	controlpoint		---------------
+				this.Parser.Animations[i].controlpoint = [];
+				this.Parser.Animations[i].controlpoint[0] = this.reader.getFloat(Animation_Node.getElementsByTagName('controlpoint')[0], 'xx');
+				this.Parser.Animations[i].controlpoint[1] = this.reader.getFloat(Animation_Node.getElementsByTagName('controlpoint')[0], 'yy');
+				this.Parser.Animations[i].controlpoint[2] = this.reader.getFloat(Animation_Node.getElementsByTagName('controlpoint')[0], 'zz');
+				
+			} else if(this.Parser.Animations[i].type == "circular")
+			{
+				//------------	center		---------------	
+				
+				var str = Animation_Node.attributes.getNamedItem('center').value;
+				var str = str.match(/\S+/g);
+				
+				this.Parser.Animations[i].center = [];
+				this.Parser.Animations[i].center[0] = parseFloat(str[0]);
+				this.Parser.Animations[i].center[1] = parseFloat(str[1]);
+				this.Parser.Animations[i].center[2] = parseFloat(str[2]);
+				
+				//------------	radius		---------------	
+				this.Parser.Animations[i].radius = parseFloat(Animation_Node.attributes.getNamedItem('radius').value);
+								
+				
+			} else 
+				return "Non-valid type on Animation index " + i + " was found.";
+		
+
+			console.log(this.Parser.Animations[i]);
+			
+			
+			
+		}
+	}
 	
 	
 	
@@ -642,7 +740,7 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 		//------------	type			---------------
 		this.Parser.Leaves[i].type = Leaf_Node.attributes.getNamedItem('type').value;
 		
-		console.log("Leaf "+ i + ": id=" + this.Parser.Leaves[i].id + ", type=" + this.Parser.Leaves[i].type);
+		//console.log("Leaf "+ i + ": id=" + this.Parser.Leaves[i].id + ", type=" + this.Parser.Leaves[i].type);
 		
 		
 		var str = Leaf_Node.attributes.getNamedItem('args').value;
@@ -655,11 +753,12 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 			this.Parser.Leaves[i].lt_y = parseFloat(arg_list[1]);
 			this.Parser.Leaves[i].rb_x = parseFloat(arg_list[2]);
 			this.Parser.Leaves[i].rb_y = parseFloat(arg_list[3]);
-			console.log("	Values: lt_x=" + this.Parser.Leaves[i].lt_x +
+			/*console.log("	Values: lt_x=" + this.Parser.Leaves[i].lt_x +
 								", lt_y=" + this.Parser.Leaves[i].lt_y +
 								", rb_x=" + this.Parser.Leaves[i].rb_x +
 								", rb_y=" + this.Parser.Leaves[i].rb_y 
 						);
+			*/
 			break;
 		
 			//------------	cylinder		---------------
@@ -669,12 +768,13 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 			this.Parser.Leaves[i].top_radius = parseFloat(arg_list[2]);
 			this.Parser.Leaves[i].sections = parseFloat(arg_list[3]);
 			this.Parser.Leaves[i].parts = parseFloat(arg_list[4]);
-			console.log("	Values: height=" + this.Parser.Leaves[i].height +
+			/*console.log("	Values: height=" + this.Parser.Leaves[i].height +
 								", bot_radius=" + this.Parser.Leaves[i].bot_radius +
 								", top_radius=" + this.Parser.Leaves[i].top_radius +
 								", sections=" + this.Parser.Leaves[i].sections +
 								", parts=" + this.Parser.Leaves[i].parts 
 						);
+			*/
 			break;
 		
 			//------------	sphere			---------------
@@ -682,10 +782,11 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 			this.Parser.Leaves[i].radius = parseFloat(arg_list[0]);
 			this.Parser.Leaves[i].sections = parseFloat(arg_list[1]);
 			this.Parser.Leaves[i].parts = parseFloat(arg_list[2]);
-			console.log("	Values: radius=" + this.Parser.Leaves[i].radius +
+			/*console.log("	Values: radius=" + this.Parser.Leaves[i].radius +
 								", sections=" + this.Parser.Leaves[i].sections +
 								", parts=" + this.Parser.Leaves[i].parts 
 						);
+			*/
 			break;
 			
 			//------------	triangle		---------------	
@@ -700,7 +801,7 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 			this.Parser.Leaves[i].p3_x = parseFloat(arg_list[6]);
 			this.Parser.Leaves[i].p3_y = parseFloat(arg_list[7]);
 			this.Parser.Leaves[i].p3_z = parseFloat(arg_list[8]);
-			console.log("	Values: p1_x=" + this.Parser.Leaves[i].p1_x +
+			/*console.log("	Values: p1_x=" + this.Parser.Leaves[i].p1_x +
 								", p1_y=" + this.Parser.Leaves[i].p1_y +
 								", p1_z=" + this.Parser.Leaves[i].p1_z +
 								", p2_x=" + this.Parser.Leaves[i].p2_x +
@@ -710,12 +811,14 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 								", p3_y=" + this.Parser.Leaves[i].p3_y +
 								", p3_z=" + this.Parser.Leaves[i].p3_z 
 						);
+			*/
 			break;
 			
 		default:
 			return "Non-valid type was found.";
 			break;
 		}
+		console.log(this.Parser.Leaves[i]);
 	}
 	
 }
@@ -799,14 +902,14 @@ MySceneGraph.prototype.parseNodes= function(rootElement){
 		if (this.Parser.Nodes[i].id == this.Parser.Root_id)
 			var bool_root_found = true;
 			
-		console.log("Node "+ i + ": id=" + this.Parser.Nodes[i].id);
+		//console.log("Node "+ i + ": id=" + this.Parser.Nodes[i].id);
 		
 		//------------	MATERIAL	---------------
 		this.Parser.Nodes[i].material_id = Node_Twice.getElementsByTagName('MATERIAL')[0].attributes.getNamedItem('id').value;
 		if (this.Parser.Nodes[i].material_id == null) {
 			return "You haven't defined any Material.";
 		}
-			console.log("	Material used:" + this.Parser.Nodes[i].material_id );
+			//console.log("	Material used:" + this.Parser.Nodes[i].material_id );
 		
 		
 		//------------	TEXTURE		---------------
@@ -814,7 +917,7 @@ MySceneGraph.prototype.parseNodes= function(rootElement){
 		if (this.Parser.Nodes[i].texture_id == null) {
 			return "You haven't defined any Texture.";
 		}
-			console.log("	Texture used:" + this.Parser.Nodes[i].texture_id );
+			//console.log("	Texture used:" + this.Parser.Nodes[i].texture_id );
 		
 		
 		//------------	Transformações ---------------
@@ -840,11 +943,12 @@ MySceneGraph.prototype.parseNodes= function(rootElement){
 
 				this.Parser.Nodes[i].Transform.push(Transformation_Element);
 				
-				console.log("	Transformation of type " + this.Parser.Nodes[i].Transform[found].type +
+				/*console.log("	Transformation of type " + this.Parser.Nodes[i].Transform[found].type +
 									": x=" +  this.Parser.Nodes[i].Transform[found].translation_x +
 									": y=" +  this.Parser.Nodes[i].Transform[found].translation_y +
 									": z=" +  this.Parser.Nodes[i].Transform[found].translation_z 
 							);
+				*/
 				
 				found++;
 				break;
@@ -857,10 +961,11 @@ MySceneGraph.prototype.parseNodes= function(rootElement){
 
 				this.Parser.Nodes[i].Transform.push(Transformation_Element);
 				
-				console.log("	Transformation of type " + this.Parser.Nodes[i].Transform[found].type +
+				/*console.log("	Transformation of type " + this.Parser.Nodes[i].Transform[found].type +
 									" over the " +  this.Parser.Nodes[i].Transform[found].axis +
 									" axis: angle=" +  this.Parser.Nodes[i].Transform[found].angle 
 							);
+				*/
 				
 				found++;
 				break;
@@ -874,11 +979,12 @@ MySceneGraph.prototype.parseNodes= function(rootElement){
 				
 				this.Parser.Nodes[i].Transform.push(Transformation_Element);
 				
-				console.log("	Transformation of type " + this.Parser.Nodes[i].Transform[found].type +
+				/*console.log("	Transformation of type " + this.Parser.Nodes[i].Transform[found].type +
 									": x=" +  this.Parser.Nodes[i].Transform[found].scale_x +
 									": y=" +  this.Parser.Nodes[i].Transform[found].scale_y +
 									": z=" +  this.Parser.Nodes[i].Transform[found].scale_z 
 							);
+				*/
 				found++;
 				break;
 			default:
@@ -900,8 +1006,10 @@ MySceneGraph.prototype.parseNodes= function(rootElement){
 		for (var j = 0; j < descendant_list.length; j++)
 		{
 			this.Parser.Nodes[i].Descendants[j] = descendant_list[j].attributes.getNamedItem('id').value;
-			console.log("	Descendant found:" + this.Parser.Nodes[i].Descendants[j] );	
+			//console.log("	Descendant found:" + this.Parser.Nodes[i].Descendants[j] );	
 		}
+		
+		console.log(this.Parser.Nodes[i]);
 		
 		
 	}

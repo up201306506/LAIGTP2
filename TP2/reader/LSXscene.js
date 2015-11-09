@@ -688,7 +688,7 @@ LSXscene.prototype.update = function(currTime) {
 	} else
 	{
 		this.tempo_actual = currTime - this.tempo_inicio ;
-		console.log(this.tempo_actual);
+		//console.log(this.tempo_actual);
 	}
 }
 

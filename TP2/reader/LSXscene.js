@@ -23,7 +23,8 @@ LSXscene.prototype.init = function (application) {
 	this.axis = new CGFaxis(this);
 	this.enableTextures(true);
 
-	
+	this.tempo_inicio = 0;
+    this.setUpdatePeriod(100);
 	
 	this.SceneNode_id;	// (String) id do Node coorrespondente à cena, ou seja, a raiz go grafo a partir do qual se encontram os restantes nós.
 	
@@ -33,9 +34,6 @@ LSXscene.prototype.init = function (application) {
 	this.MaterialArray = [];	//A maioria dos dados encontrados no Parser são guardados nestes arrays.
 	
 	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
-		
-		
-		
 };
 
 LSXscene.prototype.initLights = function () {
@@ -683,6 +681,14 @@ LSXscene.prototype.transformMatrix_m4 = function(matrix, transformtype, value_x,
 	
 }
 
-
-
+LSXscene.prototype.update = function(currTime) {
+	if(this.tempo_inicio == 0)
+	{
+		this.tempo_inicio = currTime;
+	} else
+	{
+		this.tempo_actual = currTime - this.tempo_inicio ;
+		console.log(this.tempo_actual);
+	}
+}
 

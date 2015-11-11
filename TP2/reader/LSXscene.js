@@ -24,7 +24,7 @@ LSXscene.prototype.init = function (application) {
 	this.enableTextures(true);
 
 	this.tempo_inicio = 0;
-    this.setUpdatePeriod(100);
+    this.setUpdatePeriod(1000/60);
 	
 	this.SceneNode_id;	// (String) id do Node coorrespondente à cena, ou seja, a raiz go grafo a partir do qual se encontram os restantes nós.
 	
@@ -126,11 +126,10 @@ LSXscene.prototype.display = function () {
 		this.multMatrix(this.Initial_Transform); 
 		this.Display_Node(this.SceneNode_id);
 		
-		if (this.graph.loadedOk && this.graph.Parser.Initials.axis_length > 0)
-			this.axis.display();
 		
 		this.popMatrix();  //-perspectiva original
-		
+		if (this.graph.loadedOk && this.graph.Parser.Initials.axis_length > 0)
+			this.axis.display();
 		
 	}
 
@@ -562,6 +561,15 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 	
 	
 	////----------------------------------------------------Transformations
+	
+	if(this.NodeArray[NodeID].id == this.SceneNode_id)
+	{
+	var newMat = mat4.create();
+	mat4.identity(newMat);
+	this.transformMatrix_m4(newMat, 'rotation', 0,1,0, 8*this.tempo_actual/1000);
+	this.multMatrix(newMat);
+	}
+	
 	this.multMatrix(this.NodeArray[NodeID].transformationMatrix);
 		
 		
@@ -680,6 +688,11 @@ LSXscene.prototype.transformMatrix_m4 = function(matrix, transformtype, value_x,
 	
 	
 }
+
+	//-----------------------------------------------------//
+	//-----				TIME						-------//
+	//-----------------------------------------------------//
+
 
 LSXscene.prototype.update = function(currTime) {
 	if(this.tempo_inicio == 0)

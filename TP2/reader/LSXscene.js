@@ -613,7 +613,9 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 	for(var i = 0; i < this.NodeArray[NodeID].animationList.length; i++)
 	{
 		if (this.AnimationArray[this.NodeArray[NodeID].animationList[i]].type == 'linear')
+		{
 			this.multMatrix(this.AnimationArray[this.NodeArray[NodeID].animationList[i]].getMatrix());
+		}
 	}
 
 	

@@ -15,11 +15,17 @@ function LinearAnimation(id, span, timestart, type, ControlPoints){
 	//A função constroi 
 	this.constructor_Movements(timestart);
  	
+	//Tranformação
+	this.current_angle = 0;
+	this.Matriz_Animation = mat4.create();
+	
 };
 
 
 LinearAnimation.prototype = Object.create(Animation.prototype);
 LinearAnimation.prototype.constructor = LinearAnimation;
+
+var degToRad = Math.PI / 180.0;
 
 
 LinearAnimation.prototype.constructor_Movements = function(timestart)
@@ -36,6 +42,7 @@ LinearAnimation.prototype.constructor_Movements = function(timestart)
 		//Matrix_deltas		- Matriz com a derivada do movimentos em cada eixo na ordem XYZ.
 		//Matrix_distancias	- Matriz com as distâncias totais nos eixos. Para não haver erros no ultimo update num periodo qualquer.
 		//Matrix_Traslation	- A Matriz que é aplicada nas trasnformações, é actualizada pelo update.
+		//angle				- Orientação em XZ que o objecto deve olhar 
 			//done			- Um booleano que é usado no updateMatrix para que não se façam muitas repetições inuteis de acções.
 			
 		this.Movements[i].span = this.Movement_span;
@@ -60,6 +67,8 @@ LinearAnimation.prototype.constructor_Movements = function(timestart)
 		this.Movements[i].Matrix_Traslation = [0,0,0];
 		
 		
+		this.Movements[i].angle = this.calc_Angle(this.Movements[i].Matrix_deltas[0], this.Movements[i].Matrix_deltas[2]);
+		
 		this.Movements[i].done = false;
 		
 	}
@@ -78,7 +87,6 @@ LinearAnimation.prototype.updateMatrix = function(Tempo_Mili)
 	
 	//Na eventualidade de o primeiro ponto de controlo não ser a origem, transporta-se o objecto para essa posição antes de começar.
 	mat4.translate(this.Matriz_Animation, this.Matriz_Animation, this.ControlPoints[0]);
-	
 	
 	for (var i = 0; i < this.Movement_Amount; i++)
 	{
@@ -99,6 +107,10 @@ LinearAnimation.prototype.updateMatrix = function(Tempo_Mili)
 			this.Movements[i].Matrix_Traslation[1] = Periodo_Movimento * this.Movements[i].Matrix_deltas[1];
 			this.Movements[i].Matrix_Traslation[2] = Periodo_Movimento * this.Movements[i].Matrix_deltas[2];
 			
+			//Entretanto escolhemos o angulo.
+			if (this.Movements[i].angle != null)
+				this.current_angle = this.Movements[i].angle;
+			
 		}
 		else if (this.Movements[i].done == false) 
 		{			
@@ -111,11 +123,11 @@ LinearAnimation.prototype.updateMatrix = function(Tempo_Mili)
 			//console.log("A animação " + this.id + " terminou agora o segmento de movimento de indice " + i);
 		}
 
-		
 		mat4.translate(this.Matriz_Animation, this.Matriz_Animation, this.Movements[i].Matrix_Traslation);
 		
 	}
 	
+	mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, this.current_angle*degToRad, [0,1,0]);
 
 }
 
@@ -132,4 +144,29 @@ LinearAnimation.prototype.getDuration = function()
 LinearAnimation.prototype.getEndingTime = function()
 {
 	return (this.timestart + this.span);
+}
+
+LinearAnimation.prototype.calc_Angle = function(delta_x, delta_z) {
+	
+	if (delta_x == 0 && delta_z == 0)
+		return 0;
+	else if (delta_x == 0)
+	{
+		if (delta_z > 0)
+			return 0;
+		else
+			return 180;	
+	}
+	else if (delta_z == 0)
+	{
+		if (delta_x > 0)
+			return 90;
+		else
+			return -90;	
+	} else
+		return Math.atan2(delta_x,delta_z)/degToRad;
+	
+	
+	
+	
 }

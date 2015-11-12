@@ -15,8 +15,6 @@ function LinearAnimation(id, span, timestart, type, ControlPoints){
 	//A função constroi 
 	this.constructor_Movements(timestart);
  	
-	this.Matriz_Animation = mat4.create();
-	
 };
 
 

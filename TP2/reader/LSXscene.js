@@ -32,7 +32,8 @@ LSXscene.prototype.init = function (application) {
 	this.LeafArray = []; 
 	this.NodeArray = [];	
 	this.TextureArray = [];
-	this.MaterialArray = [];	//A maioria dos dados encontrados no Parser são guardados nestes arrays.
+	this.MaterialArray = [];	
+	this.AnimationArray = [];  //A maioria dos dados encontrados no Parser são guardados nestes arrays.
 	
 	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
 	
@@ -86,6 +87,7 @@ LSXscene.prototype.onGraphLoaded = function ()
 	this.Read_Graph_Illumination();
 	this.Read_Graph_Lights();
 	this.Read_Graph_Materials();
+	this.Read_Graph_Animations();
 	this.Read_Graph_Textures();
 	
 	this.Generate_Graph_Leafs();
@@ -339,6 +341,44 @@ LSXscene.prototype.Read_Graph_Materials = function (){
 }
 
 	//-----------------------------------------------------//
+	//-----					ANIMATIONS				-------//
+	//-----------------------------------------------------//
+
+LSXscene.prototype.Read_Graph_Animations = function (){
+	for(var i = 0; i < this.graph.Parser.Animations.length; i++)
+	{
+		var newAnimation;
+		
+		if (this.graph.Parser.Animations[i].type == "linear")
+		{
+			newAnimation = new LinearAnimation(
+												this.graph.Parser.Animations[i].id, 
+												this.graph.Parser.Animations[i].span, 
+												0, 
+												"linear", 
+												this.graph.Parser.Animations[i].controlpoints);
+											
+			this.AnimationArray[this.graph.Parser.Animations[i].id] = newAnimation;
+			
+			console.log(this.AnimationArray);
+		}
+		
+		if (this.graph.Parser.Animations[i].type == "circular")
+		{
+			newAnimation = new Animation(
+												this.graph.Parser.Animations[i].id, 
+												this.graph.Parser.Animations[i].span, 
+												0, 
+												"circular");
+											
+			this.AnimationArray[this.graph.Parser.Animations[i].id] = newAnimation;
+			
+			console.log(this.AnimationArray);
+		}
+	}
+}
+
+	//-----------------------------------------------------//
 	//-----					LEAFS					-------//
 	//-----------------------------------------------------//
 
@@ -458,6 +498,9 @@ LSXscene.prototype.Generate_Graph_Nodes = function (){
 		//Texture
 		newNode.textureID = this.graph.Parser.Nodes[i].texture_id;
 		
+		//Animations
+		newNode.animationList = this.graph.Parser.Nodes[i].Animations;
+		
 		
 		//Transformation Matrix		
 		var newMatrix = mat4.create();
@@ -506,7 +549,7 @@ LSXscene.prototype.Generate_Graph_Nodes = function (){
 	if (!found)
 		console.log("There was no node with the Scene node's id!");
 	else
-		console.log("The Scene Graph is now loaded onto the Scene object. Length: " + this.NodeArray.length);
+		console.log("The Scene Graph is now loaded onto the Scene object. Length: ");
 	
 }
 
@@ -569,23 +612,13 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 		
 	////----------------------------------------------------Animations
 	
-	/*
-	// TEST TEST TEEEEEEEEST!!!	
-	var pontoscontrolo = [];
-	pontoscontrolo[0] = [0,5,0];
-	pontoscontrolo[1] = [0,0,0];
-	pontoscontrolo[2] = [5,0,0];
-	pontoscontrolo[3] = [0,0,5];
-	pontoscontrolo[4] = [0,0,0];
-	this.ObjectoAnimacao = new LinearAnimation("Animation1", 4, 0, "linear", pontoscontrolo);
-	
-	//TEST TEST TEEEEEEEEST!!!
-	if(this.NodeArray[NodeID].id == this.SceneNode_id)
+	for(var i = 0; i < this.NodeArray[NodeID].animationList.length; i++)
 	{
-		this.multMatrix(this.ObjectoAnimacao.getMatrix());
+		if (this.AnimationArray[this.NodeArray[NodeID].animationList[i]].type == 'linear')
+			this.multMatrix(this.AnimationArray[this.NodeArray[NodeID].animationList[i]].getMatrix());
 	}
-	*/
 
+	
 	//SPIN SPIN SPIIIIIIN!!!
 	/*
 	if(this.NodeArray[NodeID].id == this.SceneNode_id)
@@ -730,6 +763,10 @@ LSXscene.prototype.update = function(currTime) {
 		//console.log(this.tempo_actual);
 	}
 	
-	//this.ObjectoAnimacao.updateMatrix(this.tempo_actual);
+	if (this.graph.loadedOk)
+	{
+		for(var i = 0; i < this.graph.Parser.Animations.length; i++)
+			this.AnimationArray[this.graph.Parser.Animations[i].id].updateMatrix(this.tempo_actual);
+	}
 }
 

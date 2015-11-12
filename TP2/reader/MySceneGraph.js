@@ -652,11 +652,11 @@ MySceneGraph.prototype.parseAnimations= function(rootElement){
 			if(this.Parser.Animations[i].type == "linear")
 			{
 				//------------	controlpoint		---------------
-				this.Parser.Animations[i].controlpoint = [];
+				this.Parser.Animations[i].controlpoints = [];
 				var control_point_list = Animation_Node.getElementsByTagName('controlpoint');
 				for(var k = 0; k < control_point_list.length; k++)
 				{
-					this.Parser.Animations[i].controlpoint[k] = [ 	 parseFloat(control_point_list[k].attributes.getNamedItem('xx').value),
+					this.Parser.Animations[i].controlpoints[k] = [ 	 parseFloat(control_point_list[k].attributes.getNamedItem('xx').value),
 																	 parseFloat(control_point_list[k].attributes.getNamedItem('yy').value),
 																	 parseFloat(control_point_list[k].attributes.getNamedItem('zz').value)
 																];

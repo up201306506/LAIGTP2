@@ -653,9 +653,14 @@ MySceneGraph.prototype.parseAnimations= function(rootElement){
 			{
 				//------------	controlpoint		---------------
 				this.Parser.Animations[i].controlpoint = [];
-				this.Parser.Animations[i].controlpoint[0] = this.reader.getFloat(Animation_Node.getElementsByTagName('controlpoint')[0], 'xx');
-				this.Parser.Animations[i].controlpoint[1] = this.reader.getFloat(Animation_Node.getElementsByTagName('controlpoint')[0], 'yy');
-				this.Parser.Animations[i].controlpoint[2] = this.reader.getFloat(Animation_Node.getElementsByTagName('controlpoint')[0], 'zz');
+				var control_point_list = Animation_Node.getElementsByTagName('controlpoint');
+				for(var k = 0; k < control_point_list.length; k++)
+				{
+					this.Parser.Animations[i].controlpoint[k] = [ 	 parseFloat(control_point_list[k].attributes.getNamedItem('xx').value),
+																	 parseFloat(control_point_list[k].attributes.getNamedItem('yy').value),
+																	 parseFloat(control_point_list[k].attributes.getNamedItem('zz').value)
+																];
+				}
 				
 			} else if(this.Parser.Animations[i].type == "circular")
 			{

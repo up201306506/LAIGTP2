@@ -24,6 +24,7 @@ LSXscene.prototype.init = function (application) {
 	this.enableTextures(true);
 
 	this.tempo_inicio = 0;
+	this.tempo_actual = 0;
     this.setUpdatePeriod(1000/60);
 	
 	this.SceneNode_id;	// (String) id do Node coorrespondente à cena, ou seja, a raiz go grafo a partir do qual se encontram os restantes nós.
@@ -34,6 +35,21 @@ LSXscene.prototype.init = function (application) {
 	this.MaterialArray = [];	//A maioria dos dados encontrados no Parser são guardados nestes arrays.
 	
 	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
+	
+	
+	
+	
+	// TEST TEST TEEEEEEEEST!!!	
+	var pontoscontrolo = [];
+	pontoscontrolo[0] = [0,0,0];
+	pontoscontrolo[1] = [4,2,0];
+	pontoscontrolo[2] = [6,0,1];
+	pontoscontrolo[3] = [3,-2,4];
+	pontoscontrolo[4] = [0,0,0];
+	this.ObjectoAnimacao = new LinearAnimation("Animation1", 10, "linear", pontoscontrolo);
+		
+		
+	
 };
 
 LSXscene.prototype.initLights = function () {
@@ -561,18 +577,31 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 	
 	
 	////----------------------------------------------------Transformations
-	
-	if(this.NodeArray[NodeID].id == this.SceneNode_id)
-	{
-	var newMat = mat4.create();
-	mat4.identity(newMat);
-	this.transformMatrix_m4(newMat, 'rotation', 0,1,0, 8*this.tempo_actual/1000);
-	this.multMatrix(newMat);
-	}
-	
 	this.multMatrix(this.NodeArray[NodeID].transformationMatrix);
 		
 		
+		
+	////----------------------------------------------------Animations
+	
+	//TEST TEST TEEEEEEEEST!!!
+	if(this.NodeArray[NodeID].id == this.SceneNode_id)
+	{
+		this.multMatrix(this.ObjectoAnimacao.getMatrix());
+	}
+
+	//SPIN SPIN SPIIIIIIN!!!
+	/*
+	if(this.NodeArray[NodeID].id == this.SceneNode_id)
+	{
+		var newMat = mat4.create();
+		mat4.identity(newMat);
+		this.transformMatrix_m4(newMat, 'rotation', 0,1,0, 8*this.tempo_actual/1000);
+		this.multMatrix(newMat);
+	}
+	*/
+	
+	
+	
 		
 	////----------------------------------------------------Children
 	
@@ -703,5 +732,7 @@ LSXscene.prototype.update = function(currTime) {
 		this.tempo_actual = currTime - this.tempo_inicio ;
 		//console.log(this.tempo_actual);
 	}
+	
+	this.ObjectoAnimacao.updateMatrix(this.tempo_actual);
 }
 

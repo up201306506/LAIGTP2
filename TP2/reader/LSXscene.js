@@ -360,7 +360,6 @@ LSXscene.prototype.Read_Graph_Animations = function (){
 											
 			this.AnimationArray[this.graph.Parser.Animations[i].id] = newAnimation;
 			
-			console.log(this.AnimationArray);
 		}
 		
 		if (this.graph.Parser.Animations[i].type == "circular")
@@ -372,8 +371,7 @@ LSXscene.prototype.Read_Graph_Animations = function (){
 												"circular");
 											
 			this.AnimationArray[this.graph.Parser.Animations[i].id] = newAnimation;
-			
-			console.log(this.AnimationArray);
+
 		}
 	}
 }

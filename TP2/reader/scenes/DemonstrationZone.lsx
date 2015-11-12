@@ -105,7 +105,11 @@
 	
 	<ANIMATIONS>
 		<animation id="Animation1" span="10.5" type="linear">
+			<controlpoint xx="0" yy="0" zz="0"/>
 			<controlpoint xx="1" yy="1" zz="1"/>
+			<controlpoint xx="-2" yy="1" zz="-2"/>
+			<controlpoint xx="0" yy="-2" zz="0"/>
+			<controlpoint xx="0" yy="0" zz="0"/>
 		</animation>
 		
 		<animation id="Animation2" span="10.5" type="circular" center="1 2 3" radius="3" />
@@ -197,6 +201,10 @@
 			<DESCENDANTS>
 				<DESCENDANT id="DemoNode" />
 			</DESCENDANTS>
+			
+			<animationref id="Animation1" />
+			<animationref id="Animation2" />
+		
 		</NODE>
 		
 		<NODE id="Node4">			
@@ -209,6 +217,7 @@
 			<DESCENDANTS>
 				<DESCENDANT id="DemoNode" />
 			</DESCENDANTS>
+			
 		</NODE>
 		
 		<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->

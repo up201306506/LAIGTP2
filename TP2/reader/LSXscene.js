@@ -36,20 +36,6 @@ LSXscene.prototype.init = function (application) {
 	
 	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
 	
-	
-	
-	
-	// TEST TEST TEEEEEEEEST!!!	
-	var pontoscontrolo = [];
-	pontoscontrolo[0] = [0,0,0];
-	pontoscontrolo[1] = [4,2,0];
-	pontoscontrolo[2] = [6,0,1];
-	pontoscontrolo[3] = [3,-2,4];
-	pontoscontrolo[4] = [0,0,0];
-	this.ObjectoAnimacao = new LinearAnimation("Animation1", 10, "linear", pontoscontrolo);
-		
-		
-	
 };
 
 LSXscene.prototype.initLights = function () {
@@ -583,11 +569,22 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 		
 	////----------------------------------------------------Animations
 	
+	/*
+	// TEST TEST TEEEEEEEEST!!!	
+	var pontoscontrolo = [];
+	pontoscontrolo[0] = [0,5,0];
+	pontoscontrolo[1] = [0,0,0];
+	pontoscontrolo[2] = [5,0,0];
+	pontoscontrolo[3] = [0,0,5];
+	pontoscontrolo[4] = [0,0,0];
+	this.ObjectoAnimacao = new LinearAnimation("Animation1", 4, 0, "linear", pontoscontrolo);
+	
 	//TEST TEST TEEEEEEEEST!!!
 	if(this.NodeArray[NodeID].id == this.SceneNode_id)
 	{
 		this.multMatrix(this.ObjectoAnimacao.getMatrix());
 	}
+	*/
 
 	//SPIN SPIN SPIIIIIIN!!!
 	/*
@@ -733,6 +730,6 @@ LSXscene.prototype.update = function(currTime) {
 		//console.log(this.tempo_actual);
 	}
 	
-	this.ObjectoAnimacao.updateMatrix(this.tempo_actual);
+	//this.ObjectoAnimacao.updateMatrix(this.tempo_actual);
 }
 

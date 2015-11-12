@@ -853,8 +853,12 @@ MySceneGraph.prototype.parseNodes= function(rootElement){
 									scale_y			(float)
 									scale_z			(float)
 				? - All transformations have a "type" (text) element as well
+				
 				* DESCENDANTS:
 					** DESCENDANT: Descendants[]	(text)
+					
+				* ANIMATION:
+					** animationref: animationid	(text)
 		*/
 	
 	
@@ -1011,7 +1015,14 @@ MySceneGraph.prototype.parseNodes= function(rootElement){
 		
 		console.log(this.Parser.Nodes[i]);
 		
+		//------------	ANIMATIONS	---------------
 		
+		this.Parser.Nodes[i].Animations = [];
+		var animation_list = Node_Twice.getElementsByTagName('animationref')
+		for (var j = 0; j < animation_list.length; j++)
+		{
+			this.Parser.Nodes[i].Animations[j] = animation_list[j].attributes.getNamedItem('id').value;
+		}
 	}
 	
 	if (bool_root_found == false)

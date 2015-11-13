@@ -752,14 +752,14 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 		this.Parser.Leaves[i].type = Leaf_Node.attributes.getNamedItem('type').value;
 		
 		//console.log("Leaf "+ i + ": id=" + this.Parser.Leaves[i].id + ", type=" + this.Parser.Leaves[i].type);
-		
-		
-		var str = Leaf_Node.attributes.getNamedItem('args').value;
-		var arg_list = str.match(/\S+/g);
+
 		switch(this.Parser.Leaves[i].type)
 		{			
 			//------------	rectangle		---------------
 		case "rectangle":
+			var str = Leaf_Node.attributes.getNamedItem('args').value;
+			var arg_list = str.match(/\S+/g);
+			
 			this.Parser.Leaves[i].lt_x = parseFloat(arg_list[0]);
 			this.Parser.Leaves[i].lt_y = parseFloat(arg_list[1]);
 			this.Parser.Leaves[i].rb_x = parseFloat(arg_list[2]);
@@ -774,6 +774,9 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 		
 			//------------	cylinder		---------------
 		case "cylinder":
+			var str = Leaf_Node.attributes.getNamedItem('args').value;
+			var arg_list = str.match(/\S+/g);
+			
 			this.Parser.Leaves[i].height = parseFloat(arg_list[0]);
 			this.Parser.Leaves[i].bot_radius = parseFloat(arg_list[1]);
 			this.Parser.Leaves[i].top_radius = parseFloat(arg_list[2]);
@@ -790,6 +793,9 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 		
 			//------------	sphere			---------------
 		case "sphere":
+			var str = Leaf_Node.attributes.getNamedItem('args').value;
+			var arg_list = str.match(/\S+/g);
+			
 			this.Parser.Leaves[i].radius = parseFloat(arg_list[0]);
 			this.Parser.Leaves[i].sections = parseFloat(arg_list[1]);
 			this.Parser.Leaves[i].parts = parseFloat(arg_list[2]);
@@ -802,7 +808,10 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 			
 			//------------	triangle		---------------	
 		
-		case "triangle":		
+		case "triangle":	
+			var str = Leaf_Node.attributes.getNamedItem('args').value;
+			var arg_list = str.match(/\S+/g);
+				
 			this.Parser.Leaves[i].p1_x = parseFloat(arg_list[0]);
 			this.Parser.Leaves[i].p1_y = parseFloat(arg_list[1]);
 			this.Parser.Leaves[i].p1_z = parseFloat(arg_list[2]);
@@ -824,6 +833,44 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 						);
 			*/
 			break;
+			
+			//------------	plane			---------------
+		case "plane":
+			this.Parser.Leaves[i].parts = parseFloat(Leaf_Node.attributes.getNamedItem('parts').value);
+
+			break;
+			//------------	vehicle			---------------
+		case "vehicle":
+			break;
+			
+			//------------	terrain			---------------
+		case "terrain":
+			this.Parser.Leaves[i].texture = parseFloat(Leaf_Node.attributes.getNamedItem('texture').value);
+			this.Parser.Leaves[i].heightmap = parseFloat(Leaf_Node.attributes.getNamedItem('heightmap').value);
+			break;
+			
+			//------------	patch			---------------
+		case "patch":
+			this.Parser.Leaves[i].order = parseFloat(Leaf_Node.attributes.getNamedItem('order').value);
+			this.Parser.Leaves[i].partsU = parseFloat(Leaf_Node.attributes.getNamedItem('partsU').value);
+			this.Parser.Leaves[i].partsV = parseFloat(Leaf_Node.attributes.getNamedItem('partsV').value);
+			
+			
+			this.Parser.Leaves[i].controlpoints = [];
+			var control_point_list = Leaf_Node.getElementsByTagName('controlpoint');
+			for(var k = 0; k < control_point_list.length; k++)
+			{
+				this.Parser.Leaves[i].controlpoints[k] = [ 	 parseFloat(control_point_list[k].attributes.getNamedItem('xx').value),
+															 parseFloat(control_point_list[k].attributes.getNamedItem('yy').value),
+															 parseFloat(control_point_list[k].attributes.getNamedItem('zz').value)
+															];
+			}
+				
+			
+			break;
+			
+			
+			
 			
 		default:
 			return "Non-valid type was found.";

@@ -127,7 +127,8 @@
 		<LEAF id="cylinder1" type="cylinder" args="1 .25 .5 8 16" /> 
 		<LEAF id="sphere1" type="sphere" args="0.5 20 20" />
 		<LEAF id="triangle1" type="triangle" args="0 0 0  1 0 0  -1 1 0" />                                              -->
-
+		<LEAF id="plane1" type="plane" parts="5" /> 
+	
 	</LEAVES>
 
 

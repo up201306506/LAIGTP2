@@ -1,7 +1,7 @@
 
 
 function Plane(scene, divs) {
-	this.scen = scene;
+	this.scene = scene;
  	CGFobject.call(this,scene);
     this.surface;
     this.ready=false;
@@ -32,7 +32,7 @@ Plane.prototype.makeSurface = function (divs) {
 		return nurbsSurface.getPoint(u, v);
 	};
 
-	this.surface = new CGFnurbsObject(this.scen, getSurfacePoint, divs, divs );
+	this.surface = new CGFnurbsObject(this.scene, getSurfacePoint, divs, divs );
 	this.ready = true;
 
 
@@ -47,7 +47,13 @@ Plane.prototype.makeSurface = function (divs) {
 Plane.prototype.display= function()
 {
 	if(this.ready)
+	{
+		var transform = mat4.create();
+		mat4.scale(transform, transform, [-1,1,-1]);
+		//this.scene.multMatrix(transform);
 		this.surface.display();
+	}
+		
 		
 };
 

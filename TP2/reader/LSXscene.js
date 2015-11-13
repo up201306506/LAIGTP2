@@ -36,8 +36,6 @@ LSXscene.prototype.init = function (application) {
 	this.AnimationArray = [];  //A maioria dos dados encontrados no Parser são guardados nestes arrays.
 	
 	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
-
-	this.plano = new Plane(this,20);
 	
 };
 
@@ -131,7 +129,6 @@ LSXscene.prototype.display = function () {
 		this.pushMatrix();
 		this.multMatrix(this.Initial_Transform); 
 		this.Display_Node(this.SceneNode_id);
-		this.plano.display();
 		
 		
 		this.popMatrix();  //-perspectiva original
@@ -459,6 +456,19 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 								
 			this.LeafArray[newTriangle.id] = newTriangle;
 		}
+
+		if (this.graph.Parser.Leaves[i].type == "plane")
+		{
+			var newPlane = new Plane(this, 
+												this.graph.Parser.Leaves[i].parts);
+				
+			newPlane.type = "plane";
+			newPlane.id = this.graph.Parser.Leaves[i].id;
+								
+			this.LeafArray[newPlane.id] = newPlane;
+		}
+
+
 
 	}
 }

@@ -249,12 +249,10 @@
 		<NODE id="DemoFloor">			
 			<MATERIAL id="null" />		
 			<TEXTURE id="null" />    
-			
-			<ROTATION axis="x" angle="-90" />
-			<SCALE sx="3" sy="3" sz="1" />
+			<SCALE sx="3" sy="1" sz="3" />
 			
 			<DESCENDANTS>
-				<DESCENDANT id="rectangle1" />
+				<DESCENDANT id="plane1" />
 			</DESCENDANTS>
 		</NODE>
 		<NODE id="DemoFloatingSquare">			

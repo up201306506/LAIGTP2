@@ -37,7 +37,7 @@ LSXscene.prototype.init = function (application) {
 	
 	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
 
-	//this.plano = new Plane(this);
+	this.plano = new Plane(this,20);
 	
 };
 
@@ -131,7 +131,7 @@ LSXscene.prototype.display = function () {
 		this.pushMatrix();
 		this.multMatrix(this.Initial_Transform); 
 		this.Display_Node(this.SceneNode_id);
-		//this.plano.display();
+		this.plano.display();
 		
 		
 		this.popMatrix();  //-perspectiva original

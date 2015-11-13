@@ -128,7 +128,13 @@
 		<LEAF id="sphere1" type="sphere" args="0.5 20 20" />
 		<LEAF id="triangle1" type="triangle" args="0 0 0  1 0 0  -1 1 0" />                                              -->
 		<LEAF id="plane1" type="plane" parts="5" /> 
-	
+		<LEAF id="patch1" type="patch" order="1" partsU="5" partsV="5">
+			<controlpoint xx="0" yy="0" zz="0"/>
+			<controlpoint xx="0" yy="0" zz="1"/>
+			<controlpoint xx="1" yy="0" zz="0"/>
+			<controlpoint xx="1" yy="0" zz="1"/>
+		</LEAF>	
+		<LEAF id="terrain1" type="terrain" texture="TexturaNo1" heightmap="TexturaNo2"/>
 	</LEAVES>
 
 

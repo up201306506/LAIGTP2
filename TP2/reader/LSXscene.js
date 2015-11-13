@@ -36,6 +36,8 @@ LSXscene.prototype.init = function (application) {
 	this.AnimationArray = [];  //A maioria dos dados encontrados no Parser são guardados nestes arrays.
 	
 	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
+
+	//this.plano = new Plane(this);
 	
 };
 
@@ -129,6 +131,7 @@ LSXscene.prototype.display = function () {
 		this.pushMatrix();
 		this.multMatrix(this.Initial_Transform); 
 		this.Display_Node(this.SceneNode_id);
+		//this.plano.display();
 		
 		
 		this.popMatrix();  //-perspectiva original

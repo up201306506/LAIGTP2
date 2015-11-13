@@ -845,8 +845,8 @@ MySceneGraph.prototype.parseLeaves= function(rootElement){
 			
 			//------------	terrain			---------------
 		case "terrain":
-			this.Parser.Leaves[i].texture = parseFloat(Leaf_Node.attributes.getNamedItem('texture').value);
-			this.Parser.Leaves[i].heightmap = parseFloat(Leaf_Node.attributes.getNamedItem('heightmap').value);
+			this.Parser.Leaves[i].texture = Leaf_Node.attributes.getNamedItem('texture').value;
+			this.Parser.Leaves[i].heightmap = Leaf_Node.attributes.getNamedItem('heightmap').value;
 			break;
 			
 			//------------	patch			---------------

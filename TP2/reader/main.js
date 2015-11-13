@@ -21,6 +21,7 @@ serialInclude(['../lib/CGF.js',
 					'Animation.js',
 					'LinearAnimation.js',
 					'CircularAnimation.js',
+					'Plane.js',
 
 main=function()
 {

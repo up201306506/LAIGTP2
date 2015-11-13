@@ -676,6 +676,12 @@ MySceneGraph.prototype.parseAnimations= function(rootElement){
 				
 				//------------	radius		---------------	
 				this.Parser.Animations[i].radius = parseFloat(Animation_Node.attributes.getNamedItem('radius').value);
+				
+				//------------	startang		---------------	
+				this.Parser.Animations[i].startang = parseFloat(Animation_Node.attributes.getNamedItem('startang').value);
+				
+				//------------	rotang		---------------	
+				this.Parser.Animations[i].rotang = parseFloat(Animation_Node.attributes.getNamedItem('rotang').value);
 								
 				
 			} else 

@@ -4,6 +4,7 @@
 	this.span = span;
 	this.type = type;
 	this.timestart = timestart;
+	this.timeend = this.timestart + this.span;
 	
 	
 	this.Matriz_Animation = mat4.create();
@@ -22,6 +23,7 @@ Animation.prototype.getDuration = function(Tempo_Mili){
 	return this.span;
 }
 
-Animation.prototype.getEndingTime = function(Tempo_Mili){
-	return (this.timestart + this.span);
+Animation.prototype.getEndingTime = function()
+{
+	return this.timeend;
 }

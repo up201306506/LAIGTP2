@@ -20,6 +20,7 @@ serialInclude(['../lib/CGF.js',
 					'MySceneGraph.js', 
 					'Animation.js',
 					'LinearAnimation.js',
+					'CircularAnimation.js',
 
 main=function()
 {

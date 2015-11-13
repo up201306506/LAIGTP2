@@ -17,7 +17,6 @@ function LinearAnimation(id, span, timestart, type, ControlPoints){
  	
 	//Tranformação
 	this.current_angle = 0;
-	this.Matriz_Animation = mat4.create();
 	
 };
 
@@ -131,23 +130,7 @@ LinearAnimation.prototype.updateMatrix = function(Tempo_Mili)
 
 }
 
-LinearAnimation.prototype.getMatrix = function()
-{
-	return this.Matriz_Animation;
-}
-
-LinearAnimation.prototype.getDuration = function()
-{
-	return this.span;
-}
-
-LinearAnimation.prototype.getEndingTime = function()
-{
-	return (this.timestart + this.span);
-}
-
 LinearAnimation.prototype.calc_Angle = function(delta_x, delta_z) {
-	
 	if (delta_x == 0 && delta_z == 0)
 		return 0;
 	else if (delta_x == 0)
@@ -166,7 +149,5 @@ LinearAnimation.prototype.calc_Angle = function(delta_x, delta_z) {
 	} else
 		return Math.atan2(delta_x,delta_z)/degToRad;
 	
-	
-	
-	
+
 }

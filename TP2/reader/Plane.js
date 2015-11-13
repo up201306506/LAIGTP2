@@ -49,8 +49,8 @@ Plane.prototype.display= function()
 	if(this.ready)
 	{
 		var transform = mat4.create();
-		mat4.scale(transform, transform, [-1,1,-1]);
-		//this.scene.multMatrix(transform);
+		mat4.scale(transform, transform, [1,1,1]);
+		this.scene.multMatrix(transform);
 		this.surface.display();
 	}
 		

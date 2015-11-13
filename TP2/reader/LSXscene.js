@@ -468,6 +468,23 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			this.LeafArray[newPlane.id] = newPlane;
 		}
 
+		if (this.graph.Parser.Leaves[i].type == "patch")
+		{
+			//order,partsU,partsV,controlpoints
+			var newPatch = new Patch(this, 
+												this.graph.Parser.Leaves[i].order,
+												this.graph.Parser.Leaves[i].partsU,
+												this.graph.Parser.Leaves[i].partsV,
+												this.graph.Parser.Leaves[i].controlpoints
+												);
+				
+			newPatch.type = "patch";
+			newPatch.id = this.graph.Parser.Leaves[i].id;
+								
+			this.LeafArray[newPatch.id] = newPatch;
+			console.log(newPatch);
+		}
+
 
 
 	}

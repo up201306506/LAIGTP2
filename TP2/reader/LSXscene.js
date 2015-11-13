@@ -470,7 +470,6 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 
 		if (this.graph.Parser.Leaves[i].type == "patch")
 		{
-			//order,partsU,partsV,controlpoints
 			var newPatch = new Patch(this, 
 												this.graph.Parser.Leaves[i].order,
 												this.graph.Parser.Leaves[i].partsU,
@@ -485,6 +484,16 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			console.log(newPatch);
 		}
 
+		/*if (this.graph.Parser.Leaves[i].type == "vehicle")
+		{
+			var newVehicle = new Patch(this);
+				
+			newVehicle.type = "vehicle";
+			newVehicle.id = this.graph.Parser.Leaves[i].id;
+								
+			this.LeafArray[newVehicle.id] = newVehicle;
+			console.log(newVehicle);
+		}*/
 
 
 	}

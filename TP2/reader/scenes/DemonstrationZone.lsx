@@ -140,6 +140,7 @@
 			<controlpoint xx="1" yy="2" zz="-1"/>
 		</LEAF>	
 		<LEAF id="terrain1" type="terrain" texture="TexturaNo1" heightmap="TexturaNo2"/>
+		<LEAF id="vehicle1" type="vehicle"/>
 	</LEAVES>
 
 

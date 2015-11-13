@@ -109,10 +109,13 @@
 			<controlpoint xx="5" yy="0" zz="1"/>
 			<controlpoint xx="-2" yy="1" zz="-2"/>
 			<controlpoint xx="0" yy="-2" zz="0"/>
+			<controlpoint xx="-3" yy="0" zz="0"/>
+			<controlpoint xx="0" yy="0" zz="0"/>
+			<controlpoint xx="1" yy="5" zz="-1"/>
 			<controlpoint xx="0" yy="0" zz="0"/>
 		</animation>
 		
-		<animation id="Animation2" span="120" type="circular" center="0 0 0" radius="3" startang="0" rotang="7200"/>
+		<animation id="Animation2" span="60" type="circular" center="0 2 0" radius="2" startang="90" rotang="3600"/>
 	
 	</ANIMATIONS>
 
@@ -164,9 +167,6 @@
 				
 			</DESCENDANTS>
 			
-			
-			<animationref id="Animation2" />
-			
 		</NODE>
 		
 
@@ -181,6 +181,9 @@
 			<DESCENDANTS>
 				<DESCENDANT id="DemoNode" />
 			</DESCENDANTS>
+			
+			<animationref id="Animation2" />
+			
 		</NODE>
 			
 		<NODE id="Node2">			

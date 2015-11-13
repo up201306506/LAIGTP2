@@ -364,7 +364,7 @@ LSXscene.prototype.Read_Graph_Animations = function (){
 		
 		if (this.graph.Parser.Animations[i].type == "circular")
 		{
-			newAnimation = new Animation(
+			newAnimation = new CircularAnimation(
 												this.graph.Parser.Animations[i].id, 
 												this.graph.Parser.Animations[i].span, 
 												0, 
@@ -617,27 +617,19 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 	
 	for(var i = 0; i < this.NodeArray[NodeID].animationList.length; i++)
 	{
-		if (this.AnimationArray[this.NodeArray[NodeID].animationList[i]].type == 'linear')
-		{
-			this.multMatrix(this.AnimationArray[this.NodeArray[NodeID].animationList[i]].getMatrix());
-		}
+		this.multMatrix(this.AnimationArray[this.NodeArray[NodeID].animationList[i]].getMatrix());
 	}
 
 	
 	//SPIN SPIN SPIIIIIIN!!!
-	/*
-	if(this.NodeArray[NodeID].id == this.SceneNode_id)
+	/*if(this.NodeArray[NodeID].id == this.SceneNode_id)
 	{
 		var newMat = mat4.create();
 		mat4.identity(newMat);
 		this.transformMatrix_m4(newMat, 'rotation', 0,1,0, 8*this.tempo_actual/1000);
 		this.multMatrix(newMat);
-	}
-	*/
+	}*/
 	
-	
-	
-		
 	////----------------------------------------------------Children
 	
 	for(var j = 0; j < this.NodeArray[NodeID].childIDs.length; j++)

@@ -12,10 +12,10 @@ function LinearAnimation(id, span, timestart, type, ControlPoints){
 	this.Movement_Amount = this.ControlPoints.length - 1;
 	this.Movement_span = this.span / this.Movement_Amount;
 	
-	//A função constroi 
+	//A função constroi os segmentos de animação
 	this.constructor_Movements(timestart);
  	
-	//Tranformação
+	//Angulo que o objecto deve ficar a olhar.
 	this.current_angle = 0;
 	
 };
@@ -101,7 +101,6 @@ LinearAnimation.prototype.updateMatrix = function(Tempo_Mili)
 		}
 		else if (Periodo_Movimento < this.Movements[i].span)
 		{
-			//Estamos a meio do Movement. A distancia percorrida deve depender do delta e do tempo.
 			this.Movements[i].Matrix_Traslation[0] = Periodo_Movimento * this.Movements[i].Matrix_deltas[0];
 			this.Movements[i].Matrix_Traslation[1] = Periodo_Movimento * this.Movements[i].Matrix_deltas[1];
 			this.Movements[i].Matrix_Traslation[2] = Periodo_Movimento * this.Movements[i].Matrix_deltas[2];

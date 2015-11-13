@@ -368,7 +368,12 @@ LSXscene.prototype.Read_Graph_Animations = function (){
 												this.graph.Parser.Animations[i].id, 
 												this.graph.Parser.Animations[i].span, 
 												0, 
-												"circular");
+												"circular",
+												this.graph.Parser.Animations[i].center,
+												this.graph.Parser.Animations[i].radius,
+												this.graph.Parser.Animations[i].startang,
+												this.graph.Parser.Animations[i].rotang
+												);
 											
 			this.AnimationArray[this.graph.Parser.Animations[i].id] = newAnimation;
 

@@ -36,6 +36,14 @@ LSXscene.prototype.init = function (application) {
 	
 	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
 	
+	
+	//Test Block
+	this.TEST_Texture = new CGFtexture(this, "texture/High Altitude.JPG");
+	this.TEST_Terrain = new Terrain(this, 200);
+	this.TEST_Shader = new CGFshader(this.gl, "shaders/flatred.vert", "shaders/flatred.frag")
+	this.TEST_Shader.setUniformsValues({normScale: 50.0});
+	
+	
 };
 
 LSXscene.prototype.initLights = function () {
@@ -127,6 +135,15 @@ LSXscene.prototype.display = function () {
 		this.pushMatrix();
 		this.multMatrix(this.Initial_Transform); 
 		this.Display_Node(this.SceneNode_id);
+		
+		//Test Block
+		this.setActiveShader(this.TEST_Shader);
+		var change = mat4.create(); 
+		this.transformMatrix_m4(change, "translation", 0, -5, 0);
+		this.multMatrix(change);
+		this.TEST_Texture.bind();
+		this.TEST_Terrain.display();
+		this.setActiveShader(this.defaultShader);
 		
 		
 		this.popMatrix();  //-perspectiva original

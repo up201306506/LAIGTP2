@@ -57,7 +57,7 @@
 	
 	<TEXTURES>
 		<TEXTURE id="TexturaDaCena">
-			<file path="texture/Cena.jpg" />                             <!-- path to file -->
+			<file path="texture/nosignal.jpg" />                             <!-- path to file -->
 			<amplif_factor s="1" t="1" />              	 <!-- x/s, y/t -->
 		</TEXTURE>
 		<TEXTURE id="TexturaNo1">
@@ -75,6 +75,10 @@
 		<TEXTURE id="TexturaNo4">
 			<file path="texture/No4.jpg" />                             <!-- path to file -->
 			<amplif_factor s=".5" t=".5" />                <!-- x/s, y/t -->
+		</TEXTURE>
+		<TEXTURE id="TexturaMetal">
+			<file path="texture/metal.jpg" />                             <!-- path to file -->
+			<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
 		</TEXTURE>
 	</TEXTURES>
 	
@@ -267,7 +271,7 @@
 		</NODE>
 		<NODE id="DemoNurb">			
 			<MATERIAL id="null" />		
-			<TEXTURE id="null" />    
+			<TEXTURE id="TexturaMetal" />    
 			<TRANSLATION x="0" y="-3" z="0" />
 			<DESCENDANTS>
 				<DESCENDANT id="patch1" />

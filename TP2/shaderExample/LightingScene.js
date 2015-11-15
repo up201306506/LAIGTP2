@@ -41,12 +41,12 @@ LightingScene.prototype.init = function (application) {
 	this.appearance.setTextureWrap ('REPEAT', 'REPEAT');
 
 	this.testShaders=[
-		new CGFshader(this.gl, "shaders/flat.vert", "shaders/flat.frag"),
-		new CGFshader(this.gl, "shaders/uScale.vert", "shaders/uScale.frag"),
-		new CGFshader(this.gl, "shaders/varying.vert", "shaders/varying.frag"),
-		new CGFshader(this.gl, "shaders/texture1.vert", "shaders/texture1.frag"),
-		new CGFshader(this.gl, "shaders/texture2.vert", "shaders/texture2.frag"),
-		new CGFshader(this.gl, "shaders/texture3.vert", "shaders/texture3.frag")
+		new CGFshader(this.gl, "shaders/flat.vert", "shaders/flat.frag"), //0
+		new CGFshader(this.gl, "shaders/uScale.vert", "shaders/uScale.frag"), //1
+		new CGFshader(this.gl, "shaders/varying.vert", "shaders/varying.frag"), //2
+		new CGFshader(this.gl, "shaders/texture1.vert", "shaders/texture1.frag"), //3
+		new CGFshader(this.gl, "shaders/texture2.vert", "shaders/texture2.frag"), //4
+		new CGFshader(this.gl, "shaders/texture3.vert", "shaders/texture3.frag") //5
 	];
 
 	this.testShaders[1].setUniformsValues({normScale: 50.0});

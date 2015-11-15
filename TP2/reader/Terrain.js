@@ -1,31 +1,32 @@
 
 
-function Plane(scene, divs) {
+function Terrain(scene, divs) {
 	this.scene = scene;
  	CGFobject.call(this,scene);
     this.surface;
     this.ready=false;
     this.makeSurface(divs);
     this.initBuffers();
+	
  };
 
- Plane.prototype = Object.create(CGFobject.prototype);
- Plane.prototype.constructor = Plane;
+ Terrain.prototype = Object.create(CGFobject.prototype);
+ Terrain.prototype.constructor = Terrain;
 
 
-Plane.prototype.makeSurface = function (divs) {
+Terrain.prototype.makeSurface = function (divs) {
 		
 	var nurbsSurface = new CGFnurbsSurface(1, 1, [0, 0, 1, 1], [0, 0, 1, 1], 
 						[	// U = 0
 						[ // V = 0..1;
-							 [-0.5, 0, 0.5, 1 ],
-							 [-0.5, 0, -0.5, 1 ]
+							 [-5, 0, 5, 1 ],
+							 [-5, 0, -5, 1 ]
 							
 						],
 						// U = 1
 						[ // V = 0..1
-							 [ 0.5, 0, 0.5, 1 ],
-							 [ 0.5, 0, -0.5, 1 ]							 
+							 [ 5, 0, 5, 1 ],
+							 [ 5, 0, -5, 1 ]							 
 						]
 					]);
 	getSurfacePoint = function(u, v) {
@@ -34,17 +35,16 @@ Plane.prototype.makeSurface = function (divs) {
 
 	this.surface = new CGFnurbsObject(this.scene, getSurfacePoint, divs, divs );
 	this.ready = true;
-
-
+	
 };
 
- Plane.prototype.initBuffers = function() {
+ Terrain.prototype.initBuffers = function() {
   	this.surface.initBuffers();
 };
 
 
 
-Plane.prototype.display= function()
+Terrain.prototype.display= function()
 {
 	if(this.ready)
 	{

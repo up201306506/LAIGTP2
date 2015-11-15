@@ -58,7 +58,7 @@ LSXscene.prototype.initLights = function () {
 };
 
 LSXscene.prototype.initCameras = function () {
-	this.camera = new CGFcamera(.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+	this.camera = new CGFcamera(.4, 0.1, 500, vec3.fromValues(20, 20, 20), vec3.fromValues(0, 0, 0));
 	};
 
 LSXscene.prototype.setDefaultAppearance = function () {

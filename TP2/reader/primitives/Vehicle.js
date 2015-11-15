@@ -14,7 +14,7 @@ Vehicle.prototype.construi_partes = function(timestart)
 {
 	//Corpo
 	this.Array_Partes["corpo"] = new SpherePrimitive(this.scene,20,20,0.5);
-	this.Array_Texturas["corpo"] = new CGFtexture(this.scene, "texture/veiculo.jpg");
+	this.Array_Texturas["corpo"] = new CGFtexture(this.scene, "primitives/assets/veiculo.jpg");
 	
 }
 

@@ -57,27 +57,27 @@
 	
 	<TEXTURES>
 		<TEXTURE id="TexturaDaCena">
-			<file path="texture/nosignal.jpg" />                             <!-- path to file -->
+			<file path="scenes/Textures Demo/nosignal.jpg" />                             <!-- path to file -->
 			<amplif_factor s="1" t="1" />              	 <!-- x/s, y/t -->
 		</TEXTURE>
 		<TEXTURE id="TexturaNo1">
-			<file path="texture/No1.jpg" />                             <!-- path to file -->
+			<file path="scenes/Textures Demo/No1.jpg" />                             <!-- path to file -->
 			<amplif_factor s="1" t="1" />              	 <!-- x/s, y/t -->
 		</TEXTURE>
 		<TEXTURE id="TexturaNo2">
-			<file path="texture/No2.jpg" />                             <!-- path to file -->
+			<file path="scenes/Textures Demo/No2.jpg" />                             <!-- path to file -->
 			<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
 		</TEXTURE>
 		<TEXTURE id="TexturaNo3">
-			<file path="texture/No3.jpg" />                             <!-- path to file -->
+			<file path="scenes/Textures Demo/No3.jpg" />                             <!-- path to file -->
 			<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
 		</TEXTURE>
 		<TEXTURE id="TexturaNo4">
-			<file path="texture/No4.jpg" />                             <!-- path to file -->
+			<file path="scenes/Textures Demo/No4.jpg" />                             <!-- path to file -->
 			<amplif_factor s=".5" t=".5" />                <!-- x/s, y/t -->
 		</TEXTURE>
 		<TEXTURE id="TexturaMetal">
-			<file path="texture/metal.jpg" />                             <!-- path to file -->
+			<file path="scenes/Textures Demo/metal.jpg" />                             <!-- path to file -->
 			<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
 		</TEXTURE>
 	</TEXTURES>
@@ -146,7 +146,7 @@
 			<controlpoint xx="1" yy="2" zz="0"/>
 			<controlpoint xx="1" yy="2" zz="-1"/>
 		</LEAF>	
-		<LEAF id="terrain1" type="terrain" texture="texture/Amazonia.JPG" heightmap="texture/heightmap.JPG"/>
+		<LEAF id="terrain1" type="terrain" texture="scenes/Textures Demo/Amazonia.JPG" heightmap="scenes/Textures Demo/heightmap.JPG"/>
 		<LEAF id="vehicle1" type="vehicle"/>
 	</LEAVES>
 

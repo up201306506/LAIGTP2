@@ -38,27 +38,27 @@
 	<TEXTURES>	
 	
 		<TEXTURE id="pedra-torre">
-       		<file path="texture/torre.jpg" />            <!-- path to file -->
+       		<file path="scenes/Textures Demo/torre.jpg" />            <!-- path to file -->
         	<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
     	</TEXTURE>
 
     	<TEXTURE id="relogio">
-       		<file path="texture/relogio.jpg" />          <!-- path to file -->
+       		<file path="scenes/Textures Demo/relogio.jpg" />          <!-- path to file -->
         	<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
     	</TEXTURE>
 
     	<TEXTURE id="relva">
-       		<file path="texture/relva.jpg" />          <!-- path to file -->
+       		<file path="scenes/Textures Demo/relva.jpg" />          <!-- path to file -->
         	<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
     	</TEXTURE>
 		
 		<TEXTURE id="amarelo">
-       		<file path="texture/Amarelo.jpg" />          <!-- path to file -->
+       		<file path="scenes/Textures Demo/Amarelo.jpg" />          <!-- path to file -->
         	<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
     	</TEXTURE>
 		
 		<TEXTURE id="stars">
-       		<file path="texture/StarrySky.jpg" />          <!-- path to file -->
+       		<file path="scenes/Textures Demo/StarrySky.jpg" />          <!-- path to file -->
         	<amplif_factor s="1" t="1" />                <!-- x/s, y/t -->
     	</TEXTURE>
 

@@ -12,19 +12,19 @@ function getUrlVars() {
 }	 
 
 serialInclude(['../lib/CGF.js', 
-					'TrianglePrimitive.js', 
-					'SpherePrimitive.js', 
-					'CylinderPrimitive.js' , 
-					'SquarePrimitive.js', 
+					'primitives/TrianglePrimitive.js', 
+					'primitives/SpherePrimitive.js', 
+					'primitives/CylinderPrimitive.js' , 
+					'primitives/SquarePrimitive.js', 
 					'LSXscene.js', 
 					'MySceneGraph.js', 
-					'Animation.js',
-					'LinearAnimation.js',
-					'CircularAnimation.js',
-					'Plane.js',
-					'Patch.js',
-					'Vehicle.js',
-					'Terrain.js',
+					'animations/Animation.js',
+					'animations/LinearAnimation.js',
+					'animations/CircularAnimation.js',
+					'primitives/Plane.js',
+					'primitives/Patch.js',
+					'primitives/Vehicle.js',
+					'primitives/Terrain.js',
 
 main=function()
 {

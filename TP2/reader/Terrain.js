@@ -1,8 +1,8 @@
-function Terrain(scene, divs, Text_path, Height_path) {
+function Terrain(scene, Text_path, Height_path) {
 	this.scene = scene;
  	CGFobject.call(this,scene);
     this.surface;
-    this.makeSurface(divs);
+    this.makeSurface(150);
 	this.Texture = new CGFtexture(this.scene, Text_path);
 	this.HeightMap = new CGFtexture(this.scene, Height_path);
 	

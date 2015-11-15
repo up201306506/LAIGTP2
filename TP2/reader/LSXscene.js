@@ -35,10 +35,6 @@ LSXscene.prototype.init = function (application) {
 	this.MaterialArray = [];	//A maioria dos dados encontrados no Parser são guardados nestes arrays.
 	
 	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
-	
-	
-	//Test Block
-	this.TEST_Terrain = new Terrain(this, 150, "texture/Amazonia.JPG", "texture/heightmap.JPG");
 
 	
 };
@@ -132,13 +128,7 @@ LSXscene.prototype.display = function () {
 		this.pushMatrix();
 		this.multMatrix(this.Initial_Transform); 
 		this.Display_Node(this.SceneNode_id);
-		
 
-		//Test DISPLAY
-		var change = mat4.create(); 
-		this.transformMatrix_m4(change, "translation", 0, -5, 0);
-		this.multMatrix(change);
-		this.TEST_Terrain.display();
 		
 		
 		this.popMatrix();  //-perspectiva original
@@ -463,7 +453,17 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			this.LeafArray[newVehicle.id] = newVehicle;
 			console.log(newVehicle);
 		}*/
-
+		
+		if (this.graph.Parser.Leaves[i].type == "terrain")
+		{
+			var newTerrain = new Terrain(this, this.graph.Parser.Leaves[i].texture_path,this.graph.Parser.Leaves[i].heightmap_path);
+				
+			newTerrain.type = "terrain";
+			newTerrain.id = this.graph.Parser.Leaves[i].id;
+								
+			this.LeafArray[newTerrain.id] = newTerrain;
+			console.log(newTerrain);
+		}
 
 	}
 }

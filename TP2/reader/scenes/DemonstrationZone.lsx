@@ -146,7 +146,7 @@
 			<controlpoint xx="1" yy="2" zz="0"/>
 			<controlpoint xx="1" yy="2" zz="-1"/>
 		</LEAF>	
-		<LEAF id="terrain1" type="terrain" texture="TexturaNo1" heightmap="TexturaNo2"/>
+		<LEAF id="terrain1" type="terrain" texture="texture/Amazonia.JPG" heightmap="texture/heightmap.JPG"/>
 		<LEAF id="vehicle1" type="vehicle"/>
 	</LEAVES>
 
@@ -185,6 +185,8 @@
 				<DESCENDANT id="Node3" />
 				<DESCENDANT id="Node4" />
 				<DESCENDANT id="DemoNurb" />
+				<DESCENDANT id="DemoTerrain" />
+				
 			</DESCENDANTS>
 			
 		</NODE>
@@ -317,6 +319,16 @@
 			
 			<DESCENDANTS>
 				<DESCENDANT id="sphere1" />
+			</DESCENDANTS>
+		</NODE>
+		<NODE id="DemoTerrain">			
+			<MATERIAL id="null" />		
+			<TEXTURE id="null" />    
+			
+			<TRANSLATION x="0" y="-5" z="0" />
+			
+			<DESCENDANTS>
+				<DESCENDANT id="terrain1" />
 			</DESCENDANTS>
 		</NODE>
 

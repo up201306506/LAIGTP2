@@ -1,12 +1,15 @@
-
-
-function Terrain(scene, divs) {
+function Terrain(scene, divs, path) {
 	this.scene = scene;
  	CGFobject.call(this,scene);
     this.surface;
     this.ready=false;
     this.makeSurface(divs);
     this.initBuffers();
+	
+	this.Texture = new CGFtexture(this.scene, path);
+	this.Shader = new CGFshader(this.scene.gl, "shaders/flat.vert", "shaders/red.frag")
+	this.Shader.setUniformsValues({uSampler2: 1});
+	
 	
  };
 
@@ -48,11 +51,13 @@ Terrain.prototype.display= function()
 {
 	if(this.ready)
 	{
-		var transform = mat4.create();
-		mat4.scale(transform, transform, [1,1,1]);
-		this.scene.multMatrix(transform);
-		this.surface.display();
-	}
+
+		this.scene.setActiveShader(this.Shader);
 		
+		this.Texture.bind(1);		
+		this.surface.display();
+		
+		this.scene.setActiveShader(this.scene.defaultShader);
+	}
 		
 };

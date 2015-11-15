@@ -38,10 +38,8 @@ LSXscene.prototype.init = function (application) {
 	
 	
 	//Test Block
-	this.TEST_Texture = new CGFtexture(this, "texture/High Altitude.JPG");
-	this.TEST_Terrain = new Terrain(this, 200);
-	this.TEST_Shader = new CGFshader(this.gl, "shaders/flat.vert", "shaders/red.frag")
-	this.TEST_Shader.setUniformsValues({uSampler: 1}); //O valor um iplica que a textura a usar deve fazer bind(1)
+	this.TEST_Terrain = new Terrain(this, 10, "texture/High Altitude.JPG");
+
 	
 };
 
@@ -135,14 +133,12 @@ LSXscene.prototype.display = function () {
 		this.multMatrix(this.Initial_Transform); 
 		this.Display_Node(this.SceneNode_id);
 		
-		//Test Block
-		this.setActiveShader(this.TEST_Shader);
+
+		//Test DISPLAY
 		var change = mat4.create(); 
 		this.transformMatrix_m4(change, "translation", 0, -5, 0);
 		this.multMatrix(change);
-		this.TEST_Texture.bind(1);
 		this.TEST_Terrain.display();
-		this.setActiveShader(this.defaultShader);
 		
 		
 		this.popMatrix();  //-perspectiva original

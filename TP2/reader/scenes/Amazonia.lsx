@@ -1,0 +1,212 @@
+<SCENE>
+
+	<INITIALS>
+		<frustum near="0.1" far="500"/>                      <!-- frustum planes-->
+		<translation x="0" y="0" z="0" />                 <!-- initial translation -->
+		<rotation axis="x" angle="0" />                  <!-- initial rotation 3 -->
+		<rotation axis="y" angle="0" />                  <!-- initial rotation 2 -->
+		<rotation axis="z" angle="0" />                  <!-- initial rotation 1 -->
+		<scale sx="1" sy="1" sz="1" />                  <!-- initial scaling -->
+		<reference length="5" />                          <!-- axis length; "0" means no axis-->
+	</INITIALS>
+	
+	
+	<ILLUMINATION>
+		<ambient r="0.20" g="0.20" b="0.20" a="1" />            			<!-- global ambient -->
+		<background r=".15" g=".25" b="0.5" a=".35" />         <!-- background color -->
+	</ILLUMINATION>
+	
+	<LIGHTS>
+		<LIGHT id="Light1">
+			<enable value ="1" />
+			<position x="10" y="12" z="10" w="1" />
+			<ambient r="0" g="0" b="0" a="1" /> 
+			<diffuse r=".9" g="0.9" b="0.9" a="1" />
+			<specular r=".7" g=".7" b=".7" a="1" />
+		</LIGHT>
+		<LIGHT id="Light2">                            
+			<enable value ="1" />
+			<position x="-1" y="2" z="-1" w="1" />
+			<ambient r="0" g="0" b="0" a="1" /> 
+			<diffuse r=".7" g="0.7" b="0.7" a="1" />
+			<specular r=".7" g=".7" b=".7" a="1" />
+		</LIGHT>
+		<LIGHT id="Light3">                                 
+			<enable value ="1" />
+			<position x="-1" y="2" z="23" w="1" />
+			<ambient r="0" g="0" b="0" a="1" /> 
+			<diffuse r=".7" g="0.7" b="0.7" a="1" />
+			<specular r=".7" g=".7" b=".7" a="1" />
+		</LIGHT>
+		<LIGHT id="Light4">                            
+			<enable value ="1" />
+			<position x="23" y="2" z="-1" w="1" />
+			<ambient r="0" g="0" b="0" a="1" /> 
+			<diffuse r=".7" g="0.7" b="0.7" a="1" />
+			<specular r=".7" g=".7" b=".7" a="1" />
+		</LIGHT>
+		<LIGHT id="Light5">                                 
+			<enable value ="1" />
+			<position x="23" y="2" z="23" w="1" />
+			<ambient r="0" g="0" b="0" a="1" /> 
+			<diffuse r=".7" g="0.7" b="0.7" a="1" />
+			<specular r=".7" g=".7" b=".7" a="1" />
+		</LIGHT>
+	</LIGHTS>
+	
+	
+	<TEXTURES>
+		<TEXTURE id="TexturaDaCena">
+			<file path="scenes/Textures Amazonia/nosignal.jpg" />
+			<amplif_factor s="1" t="1" />
+		</TEXTURE>
+		<TEXTURE id="Texture_Sky">
+			<file path="scenes/Textures Amazonia/Sky.jpg" />
+			<amplif_factor s="22" t="14" />
+		</TEXTURE>
+		<TEXTURE id="Texture_Sky2">
+			<file path="scenes/Textures Amazonia/Sky2.jpg" />
+			<amplif_factor s="22" t="14" />
+		</TEXTURE>
+		<TEXTURE id="Texture_Sky3">
+			<file path="scenes/Textures Amazonia/Sky3.jpg" />
+			<amplif_factor s="22" t="14" />
+		</TEXTURE>
+		<TEXTURE id="Texture_Sky4">
+			<file path="scenes/Textures Amazonia/Sky4.jpg" />
+			<amplif_factor s="22" t="14" />
+		</TEXTURE>
+	</TEXTURES>
+	
+	
+	<MATERIALS>
+		<MATERIAL id="MaterialDaCena">                                  
+			<shininess value="5" />
+			<ambient r="1" g="1" b="1" a="1" />
+			<diffuse r=".3" g=".3" b=".3" a="1" />
+			<specular r=".3" g=".3" b=".3" a="1" /> 
+			<emission r=".1" g=".1" b=".1" a="1" />
+		</MATERIAL>
+		<MATERIAL id="MaterialSky">                                  
+			<shininess value="15" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r=".9" g=".9" b=".9" a="1" />
+			<specular r="0" g="0" b="0" a="1" /> 
+			<emission r="0.1" g="0.1" b="0.1" a="1" />
+		</MATERIAL>
+	</MATERIALS>
+	
+	<ANIMATIONS>
+	</ANIMATIONS>
+
+
+	<LEAVES>
+		<LEAF id="terrain_leaf" type="terrain" texture="scenes/Textures Amazonia/Amazonia.JPG" heightmap="scenes/Textures Amazonia/heightmap.JPG"/>
+		<LEAF id="sky_leaf1" type="rectangle" args="0 12 22 -2" />
+		<LEAF id="sky_leaf2" type="rectangle" args="0 12 22 -2" />
+		<LEAF id="sky_leaf3" type="rectangle" args="0 12 22 -2" />
+		<LEAF id="sky_leaf4" type="rectangle" args="0 12 22 -2" />
+	</LEAVES>
+
+
+	<NODES>	
+		<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+		<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+		<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+		<ROOT id="IamRoot" />     
+		<NODE id="IamRoot">			
+			<MATERIAL id="MaterialDaCena" />		
+			<TEXTURE id="TexturaDaCena" />    
+			
+			<TRANSLATION x="0" y="0" z="0" />
+			<ROTATION axis="x" angle="0" />
+			<SCALE sx="1" sy="1" sz="1" />
+			
+			<DESCENDANTS>
+				<DESCENDANT id="Vehicle_Node" />
+				<DESCENDANT id="Terrain_Node" />
+				<DESCENDANT id="Sky_Node" />
+			</DESCENDANTS>
+			
+		</NODE>
+		<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+		<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+		<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+		
+		<NODE id="Vehicle_Node">			
+			<MATERIAL id="null" />		
+			<TEXTURE id="null" />  	
+			
+			<DESCENDANTS>
+			</DESCENDANTS>
+			
+		</NODE>
+		<NODE id="Terrain_Node">			
+			<MATERIAL id="null" />		
+			<TEXTURE id="null" />  	
+			
+			<SCALE sx="2" sy="1" sz="2" />
+			<TRANSLATION x="5.5" y="-1" z="5.5" />
+			
+			<DESCENDANTS>
+				<DESCENDANT id="terrain_leaf" />
+			</DESCENDANTS>
+			
+		</NODE>
+		<NODE id="Sky_Node">			
+			<MATERIAL id="MaterialSky" />		
+			<TEXTURE id="null" />  	
+			
+			<DESCENDANTS>
+				<DESCENDANT id="Sky_Node1" />
+				<DESCENDANT id="Sky_Node2" />
+				<DESCENDANT id="Sky_Node3" />
+				<DESCENDANT id="Sky_Node4" />
+			</DESCENDANTS>
+			
+		</NODE>
+		<NODE id="Sky_Node1">			
+			<MATERIAL id="null" />		
+			<TEXTURE id="Texture_Sky" />  	
+			<DESCENDANTS>
+				<DESCENDANT id="sky_leaf1" />
+			</DESCENDANTS>
+		</NODE>
+		<NODE id="Sky_Node2">			
+			<MATERIAL id="null" />		
+			<TEXTURE id="Texture_Sky2" />  
+
+			<TRANSLATION x="21.99" y="0" z="0" />
+			<ROTATION axis="y" angle="-90" />
+			
+			<DESCENDANTS>
+				<DESCENDANT id="sky_leaf2" />
+			</DESCENDANTS>
+		</NODE>
+		<NODE id="Sky_Node3">			
+			<MATERIAL id="null" />		
+			<TEXTURE id="Texture_Sky3" />  	
+			
+			<TRANSLATION x="22" y="0" z="22" />
+			<ROTATION axis="y" angle="180" />
+			
+			<DESCENDANTS>
+				<DESCENDANT id="sky_leaf3" />
+			</DESCENDANTS>
+		</NODE>
+		<NODE id="Sky_Node4">			
+			<MATERIAL id="null" />		
+			<TEXTURE id="Texture_Sky4" />
+						
+			<TRANSLATION x="0" y="0" z="22" />
+			<ROTATION axis="y" angle="90" />
+			
+			<DESCENDANTS>
+				<DESCENDANT id="sky_leaf4" />
+			</DESCENDANTS>
+		</NODE>
+		
+	</NODES>
+	
+	
+</SCENE>

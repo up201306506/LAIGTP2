@@ -21,7 +21,7 @@ function Terrain(scene, Text_path, Height_path) {
 	
 	
 	this.Shader = new CGFshader(this.scene.gl, "shaders/extrude.vert", "shaders/singletext.frag")
-	this.Shader.setUniformsValues({HeightMap: 1});
+	this.Shader.setUniformsValues({HeightMap: 1}); //Esta função tem um console.log implementado. Se aparecer um "1" ao calhas, vem daqui.
 	this.Shader.setUniformsValues({normScale: 1.4});
 	
  };
@@ -50,7 +50,6 @@ Terrain.prototype.makeSurface = function (divs) {
 	};
 
 	this.surface = new CGFnurbsObject(this.scene, getSurfacePoint, divs, divs );
-	this.ready = true;
 	
 };
 

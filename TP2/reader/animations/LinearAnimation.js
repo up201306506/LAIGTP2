@@ -1,5 +1,5 @@
 
-function LinearAnimation(id, span, timestart, type, ControlPoints){
+function LinearAnimation(id, span, timestart, type, ControlPoints, first){
 	Animation.call(this,id,span,timestart,"linear");
 
 	this.ControlPoints = ControlPoints;
@@ -80,52 +80,59 @@ LinearAnimation.prototype.constructor_Movements = function(timestart)
 LinearAnimation.prototype.updateMatrix = function(Tempo_Mili)
 {
 	var Tempo_Segundos = Tempo_Mili/1000;
-	
+		
 	//Reset à matriz de transformação
 	mat4.identity(this.Matriz_Animation);
 	
 	//Na eventualidade de o primeiro ponto de controlo não ser a origem, transporta-se o objecto para essa posição antes de começar.
 	mat4.translate(this.Matriz_Animation, this.Matriz_Animation, this.ControlPoints[0]);
 	
-	for (var i = 0; i < this.Movement_Amount; i++)
-	{
-		
-		//A decisão de como alterar a Matriz para cada Movement depende de se o tempo que passou já corresponde a esse Movement.
-		var Periodo_Movimento = Tempo_Segundos - this.Movements[i].time_begins;
-		
-		
-		if (Periodo_Movimento <= 0) 
-		{
-			// Ainda não estamos neste momento. Não se mexe nas matrizes.
-			;
-		}
-		else if (Periodo_Movimento < this.Movements[i].span)
-		{
-			this.Movements[i].Matrix_Traslation[0] = Periodo_Movimento * this.Movements[i].Matrix_deltas[0];
-			this.Movements[i].Matrix_Traslation[1] = Periodo_Movimento * this.Movements[i].Matrix_deltas[1];
-			this.Movements[i].Matrix_Traslation[2] = Periodo_Movimento * this.Movements[i].Matrix_deltas[2];
-			
-			//Entretanto escolhemos o angulo.
-			if (this.Movements[i].angle != null)
-				this.current_angle = this.Movements[i].angle;
-			
-		}
-		else if (this.Movements[i].done == false) 
-		{			
-			//Já acabou este segmento do movimento, as distâncias na matriz devem ser máximas
-			this.Movements[i].Matrix_Traslation[0] = this.Movements[i].Matrix_distancias[0];
-			this.Movements[i].Matrix_Traslation[1] = this.Movements[i].Matrix_distancias[1];
-			this.Movements[i].Matrix_Traslation[2] = this.Movements[i].Matrix_distancias[2];
-			this.Movements[i].done = true;
-						
-			//console.log("A animação " + this.id + " terminou agora o segmento de movimento de indice " + i);
-		}
 
-		mat4.translate(this.Matriz_Animation, this.Matriz_Animation, this.Movements[i].Matrix_Traslation);
-		
-	}
 	
-	mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, this.current_angle*degToRad, [0,1,0]);
+		for (var i = 0; i < this.Movement_Amount; i++)
+		{
+			
+			//A decisão de como alterar a Matriz para cada Movement depende de se o tempo que passou já corresponde a esse Movement.
+			var Periodo_Movimento = Tempo_Segundos - this.Movements[i].time_begins;
+			
+			
+			if (Periodo_Movimento <= 0) 
+			{
+				// Ainda não estamos neste momento. Não se mexe nas matrizes.
+				;
+			}
+			else if (Periodo_Movimento < this.Movements[i].span)
+			{
+				this.Movements[i].Matrix_Traslation[0] = Periodo_Movimento * this.Movements[i].Matrix_deltas[0];
+				this.Movements[i].Matrix_Traslation[1] = Periodo_Movimento * this.Movements[i].Matrix_deltas[1];
+				this.Movements[i].Matrix_Traslation[2] = Periodo_Movimento * this.Movements[i].Matrix_deltas[2];
+				
+				//Entretanto escolhemos o angulo.
+				if (this.Movements[i].angle != null)
+					this.current_angle = this.Movements[i].angle;
+				
+			}
+			else if (this.Movements[i].done == false) 
+			{			
+				//Já acabou este segmento do movimento, as distâncias na matriz devem ser máximas
+				this.Movements[i].Matrix_Traslation[0] = this.Movements[i].Matrix_distancias[0];
+				this.Movements[i].Matrix_Traslation[1] = this.Movements[i].Matrix_distancias[1];
+				this.Movements[i].Matrix_Traslation[2] = this.Movements[i].Matrix_distancias[2];
+				this.Movements[i].done = true;
+							
+				//console.log("A animação " + this.id + " terminou agora o segmento de movimento de indice " + i);
+			}
+
+			mat4.translate(this.Matriz_Animation, this.Matriz_Animation, this.Movements[i].Matrix_Traslation);
+			
+		}
+		
+		mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, this.current_angle*degToRad, [0,1,0]);
+
+		if (Tempo_Segundos > this.timeend)
+		{
+			this.done = true;
+		}
 
 }
 

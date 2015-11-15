@@ -97,8 +97,25 @@
 	</MATERIALS>
 	
 	<ANIMATIONS>
+		<animation id="Flight1" span="1" type="linear">
+			<controlpoint xx="0" yy="0" zz="4"/>
+			<controlpoint xx="-4" yy="0" zz="4"/>
+		</animation>
+		<animation id="Flight2" span="6" type="linear">
+			<controlpoint xx="-4" yy="0" zz="4"/>
+			<controlpoint xx="-4" yy="1" zz="-4"/>
+			<controlpoint xx="4" yy="-2" zz="-4"/>
+			<controlpoint xx="4" yy="0" zz="4"/>
+		</animation>
+		<animation id="Flight3" span="1" type="linear">
+			<controlpoint xx="4" yy="0" zz="4"/>
+			<controlpoint xx="0" yy="0" zz="4"/>
+		</animation>
 	</ANIMATIONS>
 
+	
+	
+	
 
 	<LEAVES>
 		<LEAF id="terrain_leaf" type="terrain" texture="scenes/Textures Amazonia/Amazonia.JPG" heightmap="scenes/Textures Amazonia/heightmap.JPG"/>
@@ -106,6 +123,7 @@
 		<LEAF id="sky_leaf2" type="rectangle" args="0 12 22 -2" />
 		<LEAF id="sky_leaf3" type="rectangle" args="0 12 22 -2" />
 		<LEAF id="sky_leaf4" type="rectangle" args="0 12 22 -2" />
+		<LEAF id="flyingthing" type="vehicle"/>
 	</LEAVES>
 
 
@@ -133,14 +151,6 @@
 		<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 		<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 		
-		<NODE id="Vehicle_Node">			
-			<MATERIAL id="null" />		
-			<TEXTURE id="null" />  	
-			
-			<DESCENDANTS>
-			</DESCENDANTS>
-			
-		</NODE>
 		<NODE id="Terrain_Node">			
 			<MATERIAL id="null" />		
 			<TEXTURE id="null" />  	
@@ -205,6 +215,21 @@
 				<DESCENDANT id="sky_leaf4" />
 			</DESCENDANTS>
 		</NODE>
+		<NODE id="Vehicle_Node">			
+			<MATERIAL id="null" />		
+			<TEXTURE id="null" />
+						
+			<TRANSLATION x="11" y="6" z="11" />
+			
+			<DESCENDANTS>
+				<DESCENDANT id="flyingthing" />
+			</DESCENDANTS>
+			
+			<animationref id="Flight1" />
+			<animationref id="Flight2" />
+			<animationref id="Flight3" />
+		</NODE>
+		
 		
 	</NODES>
 	

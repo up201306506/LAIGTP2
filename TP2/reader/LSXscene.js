@@ -659,11 +659,30 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 		
 	////----------------------------------------------------Animations
 	
-	
+	/*
 	for(var i = 0; i < this.NodeArray[NodeID].Animations.length; i++)
-	{
+	{		
 		this.multMatrix(this.NodeArray[NodeID].Animations[i].getMatrix());
 	}
+	*/
+	
+	var mostrecentanimation;
+	for(var i = 0; i < this.NodeArray[NodeID].Animations.length; i++)
+	{
+		if (!this.NodeArray[NodeID].Animations[i].done)
+		{
+			mostrecentanimation = this.NodeArray[NodeID].Animations[i].getMatrix();
+			i = this.NodeArray[NodeID].Animations.length;
+		}
+		
+		if (i == this.NodeArray[NodeID].Animations.length-1 && mostrecentanimation == null)
+		{
+			mostrecentanimation = this.NodeArray[NodeID].Animations[i].getMatrix();
+		}	
+		
+	}
+	if (mostrecentanimation != null)
+		this.multMatrix(mostrecentanimation);
 	
 	
 	/*//SPIN SPIN SPIIIIIIN!!!

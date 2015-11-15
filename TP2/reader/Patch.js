@@ -23,7 +23,6 @@ Patch.prototype.makeSurface = function (order,partsU,partsV,controlpoints) {
 	switch(order)
 	{
 	case 1:
-	console.log(controlpoints);
 	nurbsSurface = new CGFnurbsSurface(order, order, [0, 0, 1, 1], [0, 0, 1, 1], 
 						[	// U = 0
 						[ // V = 0..1;
@@ -39,7 +38,6 @@ Patch.prototype.makeSurface = function (order,partsU,partsV,controlpoints) {
 					]);
 		break;
 	case 2:
-	console.log("ordem2");
 	nurbsSurface = new CGFnurbsSurface(order, order,[0, 0, 0, 1, 1, 1], [0, 0, 0, 1, 1, 1], 
 						[	// U = 0
 						[ // V = 0..1;
@@ -97,7 +95,7 @@ Patch.prototype.makeSurface = function (order,partsU,partsV,controlpoints) {
 					]);
 		break;
 
-	default:console.log("default");
+	default:
 		break;
 
 	}
@@ -126,8 +124,8 @@ Patch.prototype.display= function()
 	if(this.ready)
 	{
 		//console.log("display");
-		var transform = mat4.create();
-		mat4.scale(transform, transform, [1,1,1]);
+		//var transform = mat4.create();
+		//mat4.scale(transform, transform, [1,1,1]);
 		//this.scene.multMatrix(transform);
 		this.surface.display();
 	}

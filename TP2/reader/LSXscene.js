@@ -32,8 +32,7 @@ LSXscene.prototype.init = function (application) {
 	this.LeafArray = []; 
 	this.NodeArray = [];	
 	this.TextureArray = [];
-	this.MaterialArray = [];	
-	this.AnimationArray = [];  //A maioria dos dados encontrados no Parser são guardados nestes arrays.
+	this.MaterialArray = [];	//A maioria dos dados encontrados no Parser são guardados nestes arrays.
 	
 	this.mvMatrixStack = []; // Funciona como Stack atravez das funções push e popMatrix_m4. Guarda matrizes de transformação.
 	
@@ -87,7 +86,6 @@ LSXscene.prototype.onGraphLoaded = function ()
 	this.Read_Graph_Illumination();
 	this.Read_Graph_Lights();
 	this.Read_Graph_Materials();
-	this.Read_Graph_Animations();
 	this.Read_Graph_Textures();
 	
 	this.Generate_Graph_Leafs();
@@ -340,46 +338,6 @@ LSXscene.prototype.Read_Graph_Materials = function (){
 	
 }
 
-	//-----------------------------------------------------//
-	//-----					ANIMATIONS				-------//
-	//-----------------------------------------------------//
-
-LSXscene.prototype.Read_Graph_Animations = function (){
-	for(var i = 0; i < this.graph.Parser.Animations.length; i++)
-	{
-		var newAnimation;
-		
-		if (this.graph.Parser.Animations[i].type == "linear")
-		{
-			newAnimation = new LinearAnimation(
-												this.graph.Parser.Animations[i].id, 
-												this.graph.Parser.Animations[i].span, 
-												0, 
-												"linear", 
-												this.graph.Parser.Animations[i].controlpoints);
-											
-			this.AnimationArray[this.graph.Parser.Animations[i].id] = newAnimation;
-			
-		}
-		
-		if (this.graph.Parser.Animations[i].type == "circular")
-		{
-			newAnimation = new CircularAnimation(
-												this.graph.Parser.Animations[i].id, 
-												this.graph.Parser.Animations[i].span, 
-												0, 
-												"circular",
-												this.graph.Parser.Animations[i].center,
-												this.graph.Parser.Animations[i].radius,
-												this.graph.Parser.Animations[i].startang,
-												this.graph.Parser.Animations[i].rotang
-												);
-											
-			this.AnimationArray[this.graph.Parser.Animations[i].id] = newAnimation;
-
-		}
-	}
-}
 
 	//-----------------------------------------------------//
 	//-----					LEAFS					-------//
@@ -481,7 +439,6 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			newPatch.id = this.graph.Parser.Leaves[i].id;
 								
 			this.LeafArray[newPatch.id] = newPatch;
-			console.log(newPatch);
 		}
 
 		/*if (this.graph.Parser.Leaves[i].type == "vehicle")
@@ -540,10 +497,6 @@ LSXscene.prototype.Generate_Graph_Nodes = function (){
 		//Texture
 		newNode.textureID = this.graph.Parser.Nodes[i].texture_id;
 		
-		//Animations
-		newNode.animationList = this.graph.Parser.Nodes[i].Animations;
-		
-		
 		//Transformation Matrix		
 		var newMatrix = mat4.create();
 		mat4.identity(newMatrix);
@@ -577,6 +530,48 @@ LSXscene.prototype.Generate_Graph_Nodes = function (){
 			}
 		}
 		newNode.transformationMatrix = newMatrix;
+		
+		
+		//Animations
+		newNode.Animations = [];
+		var time_animations = 0;
+		for(var j = 0; j < this.graph.Parser.Nodes[i].Animations.length; j++)
+		{
+			for(var k = 0; k < this.graph.Parser.Animations.length; k++)
+			{
+				if (this.graph.Parser.Animations[k].id == this.graph.Parser.Nodes[i].Animations[j])
+				{
+					var newAnimation;
+					if (this.graph.Parser.Animations[k].type == "linear")
+					{
+						newAnimation = new LinearAnimation(
+															this.graph.Parser.Animations[k].id, 
+															this.graph.Parser.Animations[k].span, 
+															time_animations, 
+															"linear", 
+															this.graph.Parser.Animations[k].controlpoints);
+														
+						newNode.Animations.push(newAnimation);	
+					}
+					if (this.graph.Parser.Animations[k].type == "circular")
+					{
+						newAnimation = new CircularAnimation(
+															this.graph.Parser.Animations[k].id, 
+															this.graph.Parser.Animations[k].span, 
+															time_animations, 
+															"circular",
+															this.graph.Parser.Animations[k].center,
+															this.graph.Parser.Animations[k].radius,
+															this.graph.Parser.Animations[k].startang,
+															this.graph.Parser.Animations[k].rotang
+															);
+														
+						newNode.Animations.push(newAnimation);
+					}
+					time_animations += this.graph.Parser.Animations[k].span;
+				}
+			}
+		}		
 		
 		
 		//Descendents
@@ -654,14 +649,15 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 		
 	////----------------------------------------------------Animations
 	
-	for(var i = 0; i < this.NodeArray[NodeID].animationList.length; i++)
-	{
-		this.multMatrix(this.AnimationArray[this.NodeArray[NodeID].animationList[i]].getMatrix());
-	}
-
 	
-	//SPIN SPIN SPIIIIIIN!!!
-	/*if(this.NodeArray[NodeID].id == this.SceneNode_id)
+	for(var i = 0; i < this.NodeArray[NodeID].Animations.length; i++)
+	{
+		this.multMatrix(this.NodeArray[NodeID].Animations[i].getMatrix());
+	}
+	
+	
+	/*//SPIN SPIN SPIIIIIIN!!!
+	if(this.NodeArray[NodeID].id == this.SceneNode_id)
 	{
 		var newMat = mat4.create();
 		mat4.identity(newMat);
@@ -801,8 +797,25 @@ LSXscene.prototype.update = function(currTime) {
 	
 	if (this.graph.loadedOk)
 	{
-		for(var i = 0; i < this.graph.Parser.Animations.length; i++)
-			this.AnimationArray[this.graph.Parser.Animations[i].id].updateMatrix(this.tempo_actual);
+		this.updateAnimationNodes(this.NodeArray[this.SceneNode_id])
 	}
 }
 
+LSXscene.prototype.updateAnimationNodes = function(Node){
+
+	for(var i = 0; i < Node.Animations.length; i++)
+		 Node.Animations[i].updateMatrix(this.tempo_actual);
+	 
+	 
+	for(var i = 0; i < Node.childIDs.length; i++)
+	{
+		if (typeof this.NodeArray[Node.childIDs[i]] != "undefined")
+		{
+			this.updateAnimationNodes(this.NodeArray[Node.childIDs[i]])
+		}
+		
+	}		
+	
+	
+	
+}

@@ -113,10 +113,13 @@
 			<controlpoint xx="0" yy="0" zz="0"/>
 			<controlpoint xx="1" yy="5" zz="-1"/>
 			<controlpoint xx="0" yy="0" zz="0"/>
+			<controlpoint xx="-1" yy="0" zz="0"/>
+			<controlpoint xx="0" yy="0" zz="0"/>
 		</animation>
 		
 		<animation id="Animation2" span="60" type="circular" center="0 2 0" radius="2" startang="90" rotang="3600"/>
-	
+		<animation id="Animation3" span="60" type="circular" center="0 0 0" radius="0" startang="0" rotang="21600"/>
+		
 	</ANIMATIONS>
 
 
@@ -223,6 +226,7 @@
 			</DESCENDANTS>
 			
 			<animationref id="Animation1" />
+			<animationref id="Animation3" />
 		
 		</NODE>
 		

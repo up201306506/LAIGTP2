@@ -38,7 +38,7 @@ CircularAnimation.prototype.updateMatrix = function(Tempo_Mili){
 		mat4.identity(this.Matriz_Animation);
 		
 		//Afastar o objecto do centro, de forma a que esteja igual a um raio de distancia.
-		var angulo_progresso = (this.startang*degToRad) + (Tempo_Segundos*this.delta);
+		var angulo_progresso = (this.startang*degToRad) + (Periodo_Movimento*this.delta);
 		var dist_x = this.radius*Math.cos(angulo_progresso);
 		var dist_y = 0;
 		var dist_z = this.radius*Math.sin(angulo_progresso);
@@ -63,7 +63,6 @@ CircularAnimation.prototype.updateMatrix = function(Tempo_Mili){
 		mat4.translate(this.Matriz_Animation, this.Matriz_Animation, [dist_x, dist_y, dist_z]);
 		mat4.translate(this.Matriz_Animation, this.Matriz_Animation, this.center);
 		mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, -angulo_progresso, [0,1,0]);	
-		
 		
 		this.done = true;
 	}

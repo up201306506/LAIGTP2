@@ -103,7 +103,7 @@
 		</animation>
 		<animation id="Flight2" span="6" type="linear">
 			<controlpoint xx="-4" yy="0" zz="4"/>
-			<controlpoint xx="-4" yy="1" zz="-4"/>
+			<controlpoint xx="-4" yy="2" zz="-4"/>
 			<controlpoint xx="4" yy="-2" zz="-4"/>
 			<controlpoint xx="4" yy="0" zz="4"/>
 		</animation>

@@ -443,16 +443,15 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			this.LeafArray[newPatch.id] = newPatch;
 		}
 
-		/*if (this.graph.Parser.Leaves[i].type == "vehicle")
+		if (this.graph.Parser.Leaves[i].type == "vehicle")
 		{
-			var newVehicle = new Patch(this);
+			var newVehicle = new Vehicle(this);
 				
 			newVehicle.type = "vehicle";
 			newVehicle.id = this.graph.Parser.Leaves[i].id;
 								
 			this.LeafArray[newVehicle.id] = newVehicle;
-			console.log(newVehicle);
-		}*/
+		}
 		
 		if (this.graph.Parser.Leaves[i].type == "terrain")
 		{
@@ -462,7 +461,6 @@ LSXscene.prototype.Generate_Graph_Leafs = function (){
 			newTerrain.id = this.graph.Parser.Leaves[i].id;
 								
 			this.LeafArray[newTerrain.id] = newTerrain;
-			console.log(newTerrain);
 		}
 
 	}

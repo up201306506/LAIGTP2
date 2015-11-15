@@ -2,7 +2,7 @@ function Terrain(scene, Text_path, Height_path) {
 	this.scene = scene;
  	CGFobject.call(this,scene);
     this.surface;
-    this.makeSurface(150);
+    this.makeSurface(200); //Não tentem meter maior.
 	this.Texture = new CGFtexture(this.scene, Text_path);
 	this.HeightMap = new CGFtexture(this.scene, Height_path);
 	

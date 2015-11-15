@@ -22,7 +22,7 @@ function Terrain(scene, divs, Text_path, Height_path) {
 	
 	this.Shader = new CGFshader(this.scene.gl, "shaders/extrude.vert", "shaders/singletext.frag")
 	this.Shader.setUniformsValues({HeightMap: 1});
-	this.Shader.setUniformsValues({normScale: 2});
+	this.Shader.setUniformsValues({normScale: 1.4});
 	
  };
 

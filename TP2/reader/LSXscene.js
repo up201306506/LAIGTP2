@@ -38,7 +38,7 @@ LSXscene.prototype.init = function (application) {
 	
 	
 	//Test Block
-	this.TEST_Terrain = new Terrain(this, 150, "texture/Amazonia.JPG", "texture/Amazonia.JPG");
+	this.TEST_Terrain = new Terrain(this, 150, "texture/Amazonia.JPG", "texture/heightmap.JPG");
 
 	
 };

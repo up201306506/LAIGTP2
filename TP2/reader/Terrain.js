@@ -1,15 +1,28 @@
-function Terrain(scene, divs, path) {
+function Terrain(scene, divs, Text_path, Height_path) {
 	this.scene = scene;
  	CGFobject.call(this,scene);
     this.surface;
-    this.ready=false;
     this.makeSurface(divs);
-    this.initBuffers();
+	this.Texture = new CGFtexture(this.scene, Text_path);
+	this.HeightMap = new CGFtexture(this.scene, Height_path);
 	
-	this.Texture = new CGFtexture(this.scene, path);
-	this.Shader = new CGFshader(this.scene.gl, "shaders/flat.vert", "shaders/red.frag")
-	this.Shader.setUniformsValues({uSampler2: 1});
 	
+	//Passei três horas a tentar perceber porque raio isto não dava com Texture.bind()
+	this.appearance = new CGFappearance(this.scene);
+	this.appearance.setAmbient(0.3, 0.3, 0.3, 1);
+	this.appearance.setDiffuse(0.7, 0.7, 0.7, 1);
+	this.appearance.setSpecular(0.0, 0.0, 0.0, 1);	
+	this.appearance.setShininess(120);
+	this.appearance.setTexture(this.Texture);
+	this.appearance.setTextureWrap('REPEAT', 'REPEAT');
+	
+	
+	
+	
+	
+	this.Shader = new CGFshader(this.scene.gl, "shaders/extrude.vert", "shaders/singletext.frag")
+	this.Shader.setUniformsValues({HeightMap: 1});
+	this.Shader.setUniformsValues({normScale: 2});
 	
  };
 
@@ -41,23 +54,18 @@ Terrain.prototype.makeSurface = function (divs) {
 	
 };
 
- Terrain.prototype.initBuffers = function() {
-  	this.surface.initBuffers();
-};
-
-
-
 Terrain.prototype.display= function()
 {
-	if(this.ready)
-	{
-
+		this.scene.pushMatrix();
+		
+		this.appearance.apply();
+		//this.Texture.bind();
+		this.HeightMap.bind(1);
+		
 		this.scene.setActiveShader(this.Shader);
-		
-		this.Texture.bind(1);		
 		this.surface.display();
-		
 		this.scene.setActiveShader(this.scene.defaultShader);
-	}
 		
+		
+		this.scene.popMatrix();
 };

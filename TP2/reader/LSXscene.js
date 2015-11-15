@@ -658,14 +658,6 @@ LSXscene.prototype.Display_Node = function(NodeID, parentMatID, parentTexID, Mat
 		
 		
 	////----------------------------------------------------Animations
-	
-	/*
-	for(var i = 0; i < this.NodeArray[NodeID].Animations.length; i++)
-	{		
-		this.multMatrix(this.NodeArray[NodeID].Animations[i].getMatrix());
-	}
-	*/
-	
 	var mostrecentanimation;
 	for(var i = 0; i < this.NodeArray[NodeID].Animations.length; i++)
 	{

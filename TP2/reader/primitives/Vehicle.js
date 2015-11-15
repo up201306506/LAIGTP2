@@ -14,7 +14,7 @@ Vehicle.prototype.construi_partes = function()
 {
 	//Corpo
 	this.Array_Texturas["corpo"] = new CGFtexture(this.scene, "primitives/assets/Boards.jpg");	
-	this.Array_Partes["corpo"] = new Patch(this.scene, 3,4,4,
+	this.Array_Partes["corpo"] = new Patch(this.scene, 3,24,24,
 		[
 		[0,0.5,2],[0,0.5,2],[0,0.5,2],[0,0.5,2],
 		[-1,0,1],[0,-2,1],[0,-2,1],[1,0,1],
@@ -23,7 +23,7 @@ Vehicle.prototype.construi_partes = function()
 		]);
 		
 	//Chão
-	this.Array_Partes["chao"] = new Patch(this.scene, 3,4,4,
+	this.Array_Partes["chao"] = new Patch(this.scene, 3,24,24,
 		[
 		[0,0.5,2],[0,0.5,2],[0,0.5,2],[0,0.5,2],
 		[1,0,1],[-0.33,0,1],[0.33,-0,1],[-1,0,1],

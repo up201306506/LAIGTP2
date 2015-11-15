@@ -48,7 +48,10 @@ CircularAnimation.prototype.updateMatrix = function(Tempo_Mili){
 		
 			
 		//Orientação em que o objecto olha é proporcional à direcção do movimento.
-		mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, -angulo_progresso, [0,1,0]);	
+		if (this.rotang > 0)
+			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, -angulo_progresso, [0,1,0]);
+		else
+			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, angulo_progresso, [0,1,0]);	
 		
 	}
 	else if (this.done == false) 
@@ -62,7 +65,10 @@ CircularAnimation.prototype.updateMatrix = function(Tempo_Mili){
 		var dist_z = this.radius*Math.sin(angulo_progresso);
 		mat4.translate(this.Matriz_Animation, this.Matriz_Animation, [dist_x, dist_y, dist_z]);
 		mat4.translate(this.Matriz_Animation, this.Matriz_Animation, this.center);
-		mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, -angulo_progresso, [0,1,0]);	
+		if (this.rotang > 0)
+			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, -angulo_progresso, [0,1,0]);
+		else
+			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, angulo_progresso, [0,1,0]);	
 		
 		this.done = true;
 	}

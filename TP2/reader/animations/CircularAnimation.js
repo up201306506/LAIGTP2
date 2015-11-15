@@ -51,7 +51,7 @@ CircularAnimation.prototype.updateMatrix = function(Tempo_Mili){
 		if (this.rotang > 0)
 			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, -angulo_progresso, [0,1,0]);
 		else
-			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, angulo_progresso, [0,1,0]);	
+			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, (-90+this.startang)*degToRad-angulo_progresso, [0,1,0]);	
 		
 	}
 	else if (this.done == false) 
@@ -66,9 +66,9 @@ CircularAnimation.prototype.updateMatrix = function(Tempo_Mili){
 		mat4.translate(this.Matriz_Animation, this.Matriz_Animation, [dist_x, dist_y, dist_z]);
 		mat4.translate(this.Matriz_Animation, this.Matriz_Animation, this.center);
 		if (this.rotang > 0)
-			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, -angulo_progresso, [0,1,0]);
+			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, (-90+this.startang)*degToRad-angulo_progresso, [0,1,0]);
 		else
-			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, angulo_progresso, [0,1,0]);	
+			mat4.rotate(this.Matriz_Animation, this.Matriz_Animation, this.startang*degToRad-angulo_progresso, [0,1,0]);	
 		
 		this.done = true;
 	}

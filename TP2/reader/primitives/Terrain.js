@@ -1,3 +1,12 @@
+/**
+ * Construtor da classe Terrain.
+ * Guarda um objecto Shader que usa um Shader de vertices e um shader de fragmento de cor
+ * 
+ * @param scene	O objecto CGFscene em que vai ser apresentado o Terrain
+ * @param Text_path Localização (path) onde se encontra o ficheiro de textura de cores. Deve ter dimensões multiplas de 2
+ * @param Height_path Localização (path) onde se encontra o ficheiro de textura de altura. Deve ter dimensões multiplas de 2
+ * @see #makeSurface(divs)
+ */
 function Terrain(scene, Text_path, Height_path) {
 	this.scene = scene;
  	CGFobject.call(this,scene);
@@ -29,7 +38,11 @@ function Terrain(scene, Text_path, Height_path) {
  Terrain.prototype = Object.create(CGFobject.prototype);
  Terrain.prototype.constructor = Terrain;
 
-
+/**
+ * Forma e guarda em this.surface um objecto CGFnurbsSurface 
+ *
+ * @param divs Numero de partes (vertices - 1) que vão ser usados em AMBOS sentidos UV 
+ */
 Terrain.prototype.makeSurface = function (divs) {
 		
 	var nurbsSurface = new CGFnurbsSurface(1, 1, [0, 0, 1, 1], [0, 0, 1, 1], 
@@ -53,6 +66,11 @@ Terrain.prototype.makeSurface = function (divs) {
 	
 };
 
+
+/**
+ * Mostra a superfície na scene 
+ *
+ */
 Terrain.prototype.display= function()
 {
 		this.scene.pushMatrix();

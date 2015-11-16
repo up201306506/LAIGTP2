@@ -1,4 +1,12 @@
-
+/**
+ * Construtor da classe LinearAnimation.
+ * 
+ * @param id		String identificadora dese object
+ * @param span 		tempo que a animação deve durar
+ * @param timestart tempo desde o inicio de execução do programa em que a animação deve começar
+ * @param type 		String que identifica qual o tipo de animação
+ * @see #constructor_Movements(timestart)
+ */
 function LinearAnimation(id, span, timestart, type, ControlPoints, first){
 	Animation.call(this,id,span,timestart,"linear");
 
@@ -26,7 +34,13 @@ LinearAnimation.prototype.constructor = LinearAnimation;
 
 var degToRad = Math.PI / 180.0;
 
-
+/**
+ * Constroi elementos diferentes e sequenciais num array para segmentos de animação diferentes.
+ * O tempo de inicio de um segmento é o final do segmento anterior
+ * 
+ * @param timestart		Tempo em que começam os movimentos da animação.
+ * @see #calc_Angle(delta_x, delta_z)
+ */
 LinearAnimation.prototype.constructor_Movements = function(timestart)
 {
 	var latest_span_end = timestart;
@@ -77,6 +91,12 @@ LinearAnimation.prototype.constructor_Movements = function(timestart)
 	
 }
 
+/**
+ * Faz update A matriz de transformções que resolve o estado da animação para um determinado tempo dado.
+ * 
+ * @param Tempo_Mili		Tempo que passou (em milisegundos) desde o inicio da execução do programa.
+ * @see #calc_Angle(delta_x, delta_z)
+ */
 LinearAnimation.prototype.updateMatrix = function(Tempo_Mili)
 {
 	var Tempo_Segundos = Tempo_Mili/1000;
@@ -136,6 +156,13 @@ LinearAnimation.prototype.updateMatrix = function(Tempo_Mili)
 
 }
 
+
+/**
+ * Devolve, para um determinado vector 2D com componentes XZ, o angulo em que um objecto deve ficar orientado 
+ * 
+ * @param delta_x		Componente em X.
+ * @param delta_z		Componente em Z.
+ */
 LinearAnimation.prototype.calc_Angle = function(delta_x, delta_z) {
 	if (delta_x == 0 && delta_z == 0)
 		return 0;

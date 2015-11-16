@@ -1,3 +1,11 @@
+
+/**
+ * Constructor para a classe Vehicle
+ * Neste caso, o veiculo é um barco pirata
+ *
+ * @param	scene	the CGFscene object the Vehicle will be displayed in
+ * @see	construi_partes()
+ */
 function Vehicle(scene){
 	CGFobject.call(this,scene);
 	this.scene = scene;
@@ -10,6 +18,10 @@ function Vehicle(scene){
 Vehicle.prototype = Object.create(CGFobject.prototype);
 Vehicle.prototype.constructor = Vehicle;
 
+/**
+ * Gera as peças que vão fazem o Vehicle 
+ *
+ */
 Vehicle.prototype.construi_partes = function()
 {
 	//Corpo
@@ -50,6 +62,10 @@ Vehicle.prototype.construi_partes = function()
 	
 var degToRad = Math.PI / 180.0;
 
+/**
+ * Mostra na cea as peças todas do Vehicle 
+ *
+ */
 Vehicle.prototype.display = function()
 {
 	this.scene.pushMatrix();

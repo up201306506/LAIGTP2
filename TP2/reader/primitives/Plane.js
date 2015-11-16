@@ -1,5 +1,10 @@
-
-
+/**
+ * Construtor da classe Plane 
+ * 
+ * @param scene	O objecto CGFscene em que vai ser apresentado o Patch
+ * @param divs Numero de partes (vertices - 1) que vão ser usados em AMBOS sentidos UV 
+ * @see #makeSurface(divs)
+ */
 function Plane(scene, divs) {
 	this.scene = scene;
  	CGFobject.call(this,scene);
@@ -12,7 +17,11 @@ function Plane(scene, divs) {
  Plane.prototype = Object.create(CGFobject.prototype);
  Plane.prototype.constructor = Plane;
 
-
+/**
+ * Forma e guarda em this.surface um objecto CGFnurbsSurface 
+ *
+ * @param divs Numero de partes (vertices - 1) que vão ser usados em AMBOS sentidos UV 
+ */
 Plane.prototype.makeSurface = function (divs) {
 		
 	var nurbsSurface = new CGFnurbsSurface(1, 1, [0, 0, 1, 1], [0, 0, 1, 1], 
@@ -43,7 +52,10 @@ Plane.prototype.makeSurface = function (divs) {
 };
 
 
-
+/**
+ * Mostra a superfície na scene 
+ *
+ */
 Plane.prototype.display= function()
 {
 	if(this.ready)

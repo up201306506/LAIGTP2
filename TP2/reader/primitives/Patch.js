@@ -1,3 +1,13 @@
+/**
+ * Construtor da clasee Patch 
+ * 
+ * @param scene	O objecto CGFscene em que vai ser apresentado o Patch
+ * @param order A ordem das curvas em AMBOS os UV. Pode ser 1, 2 ou 3. 
+ * @param partsU Numero de partes (vertices - 1) que vão ser usados no sentido U 
+ * @param partsV Numero de partes (vertices - 1) que vão ser usados no sentido V 
+ * @param controlpoints Lista com listas de pontos que em cada U->V indicam onde se encontram os pontos de controlo do patch em XYZ. 
+ * @see #makeSurface(order,partsU,partsV,controlpoints)
+ */
 function Patch(scene, order,partsU,partsV,controlpoints) {
 	this.scene = scene;
  	CGFobject.call(this,scene);
@@ -10,7 +20,14 @@ function Patch(scene, order,partsU,partsV,controlpoints) {
  Patch.prototype = Object.create(CGFobject.prototype);
  Patch.prototype.constructor = Patch;
 
-
+/**
+ * Forma e guarda em this.surface um objecto CGFnurbsSurface 
+ * 
+ * @param order A ordem das curvas em AMBOS os UV. Pode ser 1, 2 ou 3. 
+ * @param partsU Numero de partes (vertices - 1) que vão ser usados no sentido U 
+ * @param partsV Numero de partes (vertices - 1) que vão ser usados no sentido V 
+ * @param controlpoints Lista com listas de pontos que em cada U->V indicam onde se encontram os pontos de controlo do patch em XYZ.
+ */
 Patch.prototype.makeSurface = function (order,partsU,partsV,controlpoints) {
 		
 	var nurbsSurface;
@@ -113,12 +130,16 @@ Patch.prototype.makeSurface = function (order,partsU,partsV,controlpoints) {
 
 };
 
+
  Patch.prototype.initBuffers = function() {
   	this.surface.initBuffers();
 };
 
 
-
+/**
+ * Mostra a superficie na cena 
+ * 
+ */
 Patch.prototype.display= function()
 {
 	if(this.ready)

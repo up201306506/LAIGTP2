@@ -1,4 +1,12 @@
-
+/**
+ * Construtor da classe CircularAnimation.
+ * Guarda alguns valores basicos que outras animações poderaão usar 
+ * 
+ * @param id		String identificadora dese object
+ * @param span 		tempo que a animação deve durar
+ * @param timestart tempo desde o inicio de execução do programa em que a animação deve começar
+ * @param type 		String que identifica qual o tipo de animação
+ */
  function CircularAnimation(id, span, timestart, type, center, radius, startang, rotang) {
 	Animation.call(this,id,span,timestart,"circular");
 
@@ -19,7 +27,11 @@ CircularAnimation.prototype.constructor = CircularAnimation;
 
 var degToRad = Math.PI / 180.0;
 
-
+/**
+ * Faz update A matriz de transformções que resolve o estado da animação para um determinado tempo dado.
+ * 
+ * @param Tempo_Mili		Tempo que passou (em milisegundos) desde o inicio da execução do programa.
+ */
 CircularAnimation.prototype.updateMatrix = function(Tempo_Mili){
 
 	var Tempo_Segundos = Tempo_Mili/1000;
